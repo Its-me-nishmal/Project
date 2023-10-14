@@ -59,3 +59,38 @@ function validateInput(name, email, password, repassword, terms) {
     if (!terms.checked) return 'You must accept the terms and conditions';
     return true;
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const changestatusButtons = document.querySelectorAll('.changestatus');
+  
+    changestatusButtons.forEach((button) => {
+      button.addEventListener('click', async (e) => {
+        e.preventDefault();
+  
+        // Traverse the DOM to find the closest parent form and then find the associated inputs
+        const form = button.closest('form') || button.closest('div'); 
+        const tclassValue = form.querySelector('.tclass').value;
+        const tstatusValue = form.querySelector('.tstatus').value;
+        const nmaeValue = form.querySelector('.nmae').value;
+        if (!nmaeValue || !tclassValue || !tstatusValue) {
+          alert('Fields cannot be empty');
+        } else {
+          try {
+            const response = await fetch('/teacher/change_status', {
+              method: "POST",
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ nmae: nmaeValue, tclass: tclassValue, tstatus: tstatusValue })
+            });
+            if (!response.ok) throw new Error('Failed to save data');
+            const data = await response.json();
+            if (data) {
+              window.location.reload();
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      });
+    });
+  });

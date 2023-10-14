@@ -122,3 +122,4 @@ document.getElementById('googlesignup').addEventListener('click', () => {
   window.location.href = 'http://localhost:3000/student/auth/google';
 
 });
+

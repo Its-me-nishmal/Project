@@ -1,2 +1,41 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .dashboard {
+            margin-top: 50px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            margin: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <a href="/admin" class="button">Admin</a>
+        <a href="/student" class="button">Student</a>
+        <a href="/teacher" class="button">Teacher</a>
+        <a href="#" class="button">Parent</a>
+    </div>
+</body>
+</html>
