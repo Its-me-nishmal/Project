@@ -113,6 +113,20 @@ router.get('/students', auth ,  async (req, res) => {
   }
 });
 
+router.get('/attendences', auth ,  async (req, res) => {
+  try {
+    const teacher = req.teacher
+    const students = await Students.find({ class : teacher.class });
+    const date = new Date();
+    const h_date = date.toString().split(' GMT')[0]
+    // Render the 'teachers' view and pass the 'teachers' data to it
+    res.render(path.join(__dirname, '../views/teacher/attendences'), { students: students , date : h_date});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 router.post('/change_status', async (req, res) => {
   const { nmae, tstatus , tclass } = req.body;
 

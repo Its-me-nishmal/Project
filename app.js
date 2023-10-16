@@ -6,11 +6,19 @@ var logger = require('morgan');
 var mongoose = require('mongoose')
 var mongodb = require('./.config/dbconnect')
 const passport = require('./.config/auth.js');
+const auto_attendence = require('./services/auto_attendences')
+const cron = require('node-cron')
+
+
+
+
+
 
 var indexRouter = require('./routes/index');
 var studentRouter = require('./routes/student');
 const adminRouter = require('./routes/admin');
 const teacherRouter = require('./routes/teacher');
+const Attendences = require('./model/Attendences');
 
 
 var app = express();
@@ -22,6 +30,12 @@ app.use(require("express-session")({
   saveUninitialized: true,
   cookie: { secure: false } 
 }))
+
+cron.schedule('0 9 * * *', async () => {
+  await auto_attendence();
+  console.log('auto_attendance successflly');
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
