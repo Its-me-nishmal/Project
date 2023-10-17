@@ -31,10 +31,11 @@ app.use(require("express-session")({
   cookie: { secure: false } 
 }))
 
-cron.schedule('0 9 * * *', async () => {
+cron.schedule('55 12 * * *', async () => {
   await auto_attendence();
   console.log('auto_attendance successflly');
 });
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

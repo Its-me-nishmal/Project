@@ -304,7 +304,8 @@
                                                     </div>
                                                     <div class="col-xl-6 text-end">
                                                         <!-- Added text-end for right alignment -->
-                                                        <button class="btn  mt-3 me-5 btn-dark">Update</button>
+                                                        <button class="btn  mt-3 me-5 btn-dark"
+                                                            id="update">Update</button>
                                                     </div>
                                                 </div>
 
@@ -312,12 +313,14 @@
                                                 <div class="demo-inline-spacing m-3">
                                                     <div class="list-group">
                                                         {{#each students}}
-                                                        <label class="list-group-item">
-                                                            <input class="form-check-input me-1" type="checkbox"
-                                                                value="" checked />
+                                                        <label class="list-group-item std-data">
+                                                            <input class="form-check-input me-1 check-data"
+                                                                type="checkbox" value="{{this._id}}" {{#if
+                                                                this.isPresent}}checked{{/if}}>
                                                             {{name}}
                                                         </label>
                                                         {{/each}}
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -439,7 +442,7 @@
                 </div>
             </div>
 
-
+            <script src="../assets/js/attendences.js"></script>
             <script src="../assets/js/teacher.js"></script>
             <script src="../assets/vendor/libs/jquery/jquery.js"></script>
             <script src="../assets/vendor/libs/popper/popper.js"></script>
