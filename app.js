@@ -19,6 +19,7 @@ var indexRouter = require('./routes/index');
 var studentRouter = require('./routes/student');
 const adminRouter = require('./routes/admin');
 const teacherRouter = require('./routes/teacher');
+const parentRouter = require('./routes/parent');
 const Attendences = require('./model/Attendences');
 
 
@@ -42,30 +43,6 @@ cron.schedule('0 9 * * *', async () => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-const axios = require('axios');
-
-const options = {
-  method: 'GET',
-  url: 'https://public-holiday.p.rapidapi.com/2023/IN',
-  headers: {
-    'X-RapidAPI-Key': 'c28fcc9f22msh69234def6d06879p11cbbejsn15d48e1ff306',
-    'X-RapidAPI-Host': 'public-holiday.p.rapidapi.com'
-  }
-};
-
-// Use an async function to make asynchronous requests
-async function fetchData() {
-  try {
-    const response = await axios.request(options);
-    console.log(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Call the async function to initiate the request
-fetchData();
-
 
 app.use(express.json());
 app.use(passport.initialize());
@@ -82,6 +59,7 @@ app.use('/', indexRouter);
 app.use('/student', studentRouter);
 app.use('/admin', adminRouter)
 app.use('/teacher', teacherRouter);
+app.use('/parent', parentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

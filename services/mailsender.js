@@ -72,4 +72,4 @@ table.es-table-not-adapt, .esd-block-html table { width:auto!important } .es-soc
     });
     }
 
-module.exports = {verify_teacher,reject_teacher};
+module.exports = {verify_teacher,reject_teacher}
