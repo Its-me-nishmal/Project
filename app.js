@@ -8,6 +8,7 @@ var mongodb = require('./.config/dbconnect')
 const passport = require('./.config/auth.js');
 const auto_attendence = require('./services/auto_attendences')
 const cron = require('node-cron')
+require('./services/mailsender')
 
 
 
@@ -31,7 +32,7 @@ app.use(require("express-session")({
   cookie: { secure: false } 
 }))
 
-cron.schedule('55 12 * * *', async () => {
+cron.schedule('0 9 * * *', async () => {
   await auto_attendence();
   console.log('auto_attendance successflly');
 });
@@ -41,7 +42,32 @@ cron.schedule('55 12 * * *', async () => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+const axios = require('axios');
 
+const options = {
+  method: 'GET',
+  url: 'https://public-holiday.p.rapidapi.com/2023/IN',
+  headers: {
+    'X-RapidAPI-Key': 'c28fcc9f22msh69234def6d06879p11cbbejsn15d48e1ff306',
+    'X-RapidAPI-Host': 'public-holiday.p.rapidapi.com'
+  }
+};
+
+// Use an async function to make asynchronous requests
+async function fetchData() {
+  try {
+    const response = await axios.request(options);
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Call the async function to initiate the request
+fetchData();
+
+
+app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 

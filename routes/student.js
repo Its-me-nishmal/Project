@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const auth = require('../.config/student_auth')
 const jwt = require('jsonwebtoken')
+const Classes = require('../model/classes');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -21,10 +22,20 @@ const jwt = require('jsonwebtoken')
 
 
 router.get('/',auth,(req,res)=> req.cookies.student_token
-? res.render(path.join(__dirname,'../views/student/student'),{student : req.student})
+&& req.student.roll == 'admin' ? res.render(path.join(__dirname,'../views/student/student'),{student : req.student,Leader:"leader"})
+: req.cookies.student_token ? res.render(path.join(__dirname,'../views/student/student'),{student : req.student})
 : res.redirect('/student/login'))
 
-router.get('/register', (req, res) => res.render(path.join(__dirname, '../views/student/register.hbs')));
+router.get('/register', async (req, res) => {
+  try {
+      const classesData = await Classes.find();
+      res.render(path.join(__dirname, '../views/student/register.hbs'), { classes: classesData });
+  } catch (error) {
+      console.error('Error fetching classes:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
 router.get('/login', (req, res) => res.render(path.join(__dirname, '../views/student/login.hbs')));
 
 router.post('/register', async (req, res) => {
@@ -48,7 +59,6 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const check = await Students.findOne({ email: email });
-    console.log(check);
 
     if (!check) {
       return res.render(path.join(__dirname, '../views/student/login.hbs'), { user: 'not find email' });

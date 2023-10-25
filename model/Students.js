@@ -10,7 +10,8 @@ const StudentSchema = new mongoose.Schema({
     mobile: Number,
     parent: String,
     tokens : String,
-    amount : String
+    amount : String,
+    roll : { type: String, default: "Student"  , required: true , unique: true},
   });
  
 const Students = mongoose.model('Students',StudentSchema);

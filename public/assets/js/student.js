@@ -7,24 +7,23 @@ const ok = submit.textContent == "Sign in"
 console.log(ok);
 if (ok) {
     function temp1 () {
-        // submit.addEventListener('click', (e) => {
-        //     const [email,password,changelog] = did('email', 'password','changelog')
-        //     if (!email.value || !password.value) {
-        //         changelog.textContent = 'Please fill all fields below'
-        //         changelog.style.color = 'orange';
-        //         e.preventDefault()
-        //     } else {
-        //         fetch('/student/login',{
-        //             method:'POST',
-        //             headers: {'Content-Type': 'application/json',
-        //             body: JSON.stringify({
-        //                 email:email.value,
-        //                 password:password.value
-        //             })}
-        //         })
-        //     }
-        // })
-        alert('login')
+        submit.addEventListener('click', (e) => {
+            const [email,password,changelog] = did('email', 'password','changelog')
+            if (!email.value || !password.value) {
+                changelog.textContent = 'Please fill all fields below'
+                changelog.style.color = 'orange';
+                e.preventDefault()
+            } else {
+                fetch('/student/login',{
+                    method:'POST',
+                    headers: {'Content-Type': 'application/json',
+                    body: JSON.stringify({
+                        email:email.value,
+                        password:password.value
+                    })}
+                })
+            }
+        })
     } temp1()
 } else {
     function temp2() {

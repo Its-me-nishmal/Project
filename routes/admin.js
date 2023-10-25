@@ -8,7 +8,10 @@ const Teacher = require('../model/Teachers');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 require('dotenv').config();
-const auth = require('../.config/admin_auth')
+const auth = require('../.config/admin_auth');
+const Students = require('../model/Students');
+const Classes = require('../model/classes')
+const {verify_teacher , reject_teacher} = require('../services/mailsender')
 
 
 
@@ -28,8 +31,51 @@ router.get('/teachers', async (req, res) => {
       res.status(500).send('Internal server error');
     }
   });
-  
 
+  router.get('/students', async (req, res) => {
+    try {
+      const Student = await Students.find();
+  
+      // Render the 'teachers' view and pass the 'teachers' data to it
+      res.render(path.join(__dirname, '../views/admin/students'), { students: Student });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal server error');
+    }
+  });
+
+  router.post('/change_status', async (req, res) => {
+    const { nmae, tstatus, tclass } = req.body;
+  
+    if (!nmae || !tstatus) {
+      console.log('Name or Status missing in the request body');
+      return res.status(400).send('Name or Status missing');
+    }
+  
+    try {
+      const student = await Students.findOne({ email: nmae });
+  
+      if (!student) {
+        console.log('student not found');
+        return res.status(404).send('student not found');
+      }
+      student.roll = tclass;
+      student.status = tstatus;
+      await student.save(); // Save the updated document
+  
+      console.log('student status updated successfully');
+      res.json(student)
+    } catch (error) {
+      console.log('Error updating teacher status');
+      console.log(error);
+      return res.status(500).send('Internal Server Error');
+    }
+  });
+  
+router.get('/classes',async(req,res)=>{
+   const data = await Classes.find()
+    res.render(path.join(__dirname, '../views/admin/classes'),{classes: data})
+})
 
 // router.get('/register',async(req,res)=>{
 //     email = process.env.DEFAULT_ADMIN
@@ -77,7 +123,7 @@ router.post('/new_pass',async (req,res)=>{
 })
 
 
-router.post('/change_status', async (req, res) => {
+router.post('/change_statuss', async (req, res) => {
     const { nmae, tstatus , tclass } = req.body;
 
     if (!nmae || !tstatus) {
@@ -94,8 +140,8 @@ router.post('/change_status', async (req, res) => {
         }
         teacher.class = tclass;
         teacher.status = tstatus; 
-        await teacher.save(); // Save the updated document
-
+        await teacher.save(); 
+        teacher.status == 'active' ? verify_teacher(teacher.email) : teacher.status = 'rejected' ? reject_teacher(teacher.email) : console.log('pending')
         console.log('Teacher status updated successfully');
         res.json(teacher)
     } catch (error) {
@@ -104,6 +150,38 @@ router.post('/change_status', async (req, res) => {
         return res.status(500).send('Internal Server Error');
     }
 });
+
+router.post('/classes', async (req, res) => {
+  try {
+    const data = req.body;
+    const newClasses = await Classes.insertMany(data);
+    res.status(200).json(newClasses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+router.delete('/classes/:name', async (req, res) => {
+    const className = req.params.name;
+
+    try {
+        const classesData = await Classes.find();
+        const index = classesData.findIndex(c => c.name === className);
+
+        if (index !== -1) {
+            await Classes.deleteOne({ name: className });
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 
 
