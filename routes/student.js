@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const passport = require('passport');
 const mongoose = require('mongoose')
 const Students = require('../model/Students');
+const Parents = require('../model/Parents');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const auth = require('../.config/student_auth')
@@ -88,6 +89,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/profile',auth, (req,res) => res.render(path.join(__dirname,'../views/student/profile')))
 
 router.post('/payment',(req,res)=>{res.send('going to payment')})
 
@@ -112,5 +114,21 @@ router.get('/logout', function (req, res) {
 
   });
 });
+
+router.post("/profile/update/parent",auth,async(req,res)=>{
+  const { pname, job, phone, email } = req.body;
+  const { _id } = req.student;
+  try{
+    const parent = await Parents.findOneAndUpdate({student_id: _id},
+      {
+        phone: phone,
+        job: job,
+        email: email,
+        name:pname,
+        token:jwt.sign({_id},process.env.PARENT)
+      },{upsert:true,new:true});
+      res.status(200).send("success");
+  } catch(e){console.log(e);}
+})
 
 module.exports = router;

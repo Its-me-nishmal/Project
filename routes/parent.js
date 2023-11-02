@@ -5,11 +5,13 @@ const cookieParser = require('cookie-parser')
 const passport = require('passport');
 const mongoose = require('mongoose')
 const Students = require('../model/Students');
+const Parents = require('../model/Parents');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const auth = require('../.config/student_auth')
 const jwt = require('jsonwebtoken')
 const Classes = require('../model/classes');
+const Attendences = require('../model/Attendences');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -18,75 +20,73 @@ const Classes = require('../model/classes');
 //   res.redirect('/student/login');
 // });
 
+router.get('/login', (req, res) => {
+  res.render('parent/login')
+});
 
 
+router.get('/', async (req, res) => {
+  if (req.cookies.parent_token) {
+      try {
+          const parent = await Parents.findOne({ token: req.cookies.parent_token })
 
-router.get('/',(req,res)=> req.cookies.parent_token
-&& req.student.roll == 'admin' ? res.render(path.join(__dirname,'../views/student/student'),{student : req.student,Leader:"leader"})
-: req.cookies.parent_token ? res.render(path.join(__dirname,'../views/student/student'),{student : req.student})
-: res.redirect('/parent/login'))
+          if (parent) {
+              const student = await Students.findById(parent.student_id);
 
-router.get('/register', async (req, res) => {
-  try {
-      const classesData = await Classes.find()
-      res.render(path.join(__dirname, '../views/student/register.hbs'), { classes: classesData });
-  } catch (error) {
-      console.error('Error fetching classes:', error);
-      res.status(500).send('Internal Server Error');
+              if (student) {
+                const attendances = await Attendences.aggregate([
+                  { $match: {'students.std_id': student._id}},
+                  {
+                    $project: {
+                      date: 1,
+                      students: {
+                        $filter:{
+                          input: '$students',
+                          as: 'student',
+                          cond: {$eq: ['$$student.std_id',student._id]}
+                        }
+                      }
+                    }
+                  }
+                ])
+                
+                  console.log(attendances);
+                  
+                  res.render('parent/index', { parent, student, attendances });
+              } else {
+                  res.redirect('/parent/login');
+              }
+          } else {
+              res.redirect('/parent/login');
+          }
+      } catch (err) {
+          res.redirect('/parent/login');
+      }
+  } else {
+      res.redirect('/parent/login');
   }
 });
 
-router.get('/login', (req, res) => res.render(path.join(__dirname, '../views/student/login.hbs')));
-
-router.post('/register', async (req, res) => {
-  const { anme , email, password , selectNumber } = req.body
-  const pass = await bcrypt.hash(password, 10)
-  console.log(pass)
-  const user = new Students({
-    name: anme,
-    email: email,
-    password: pass,
-    status: "pending",
-    class : selectNumber,
-    amount : '0'
-  });
-  await user.save()
-  res.redirect('/student/login')
-  
-})
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const check = await Students.findOne({ email: email });
+    const { email, phone } = req.body;
+    console.log(req.body);
+    const check = await Parents.findOne({ email: email, phone: phone });
 
-    if (!check) {
-      return res.render(path.join(__dirname, '../views/student/login.hbs'), { user: 'not find email' });
-    }
-    console.log(password + " " + check.password);
-    const pass = await bcrypt.compare(password, check.password);
-    
-    if (!pass) {
-      return res.render(path.join(__dirname, '../views/student/login.hbs'), { pass: 'not valid' });
-    }
+    if (!check) res.render(path.join(__dirname, '../views/parent/login.hbs'), { user: 'Invalid credentials' });
 
-    if (check.status === 'pending') {
-      return res.render(path.join(__dirname, '../views/student/login.hbs'), { status_pending: 'pending' });
-    } else if (check.status === 'rejected') {
-      return res.render(path.join(__dirname, '../views/student/login.hbs'), { status_rejected: 'rejected' });
-    } else if (check.status === 'payment') {
-      return res.render(path.join(__dirname, '../views/student/login.hbs'), { pay: check.amount });
-    } else {
-      const student_token = jwt.sign({ StudentId : check._id},process.env.JWT)
-      check.tokens = student_token
-      await check.save() 
-      res.cookie('student_token', student_token, { httpOnly: true });
-      return res.redirect('/student');
-    }
+    const parent_token = jwt.sign({ ParentId: check._id }, process.env.JWT);
+    check.token = parent_token;
+    await check.save();
+
+    res.cookie('parent_token', parent_token, { httpOnly: true });
+    return res.redirect("/parent");
   } catch (e) {
     console.error(e);
   }
 });
+
 
 
 router.post('/payment',(req,res)=>{res.send('going to payment')})

@@ -111,7 +111,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Traverse the DOM to find the closest parent form and then find the associated inputs
       const form = button.closest('form') || button.closest('div'); 
-      const tclassValue = form.querySelector('.tclass').value;
+      const selectedOption = form.querySelector('.tclasses');
+      const tclassValue = selectedOption.value;
       const tstatusValue = form.querySelector('.tstatus').value;
       const nmaeValue = form.querySelector('.nmae').value;
       if (!nmaeValue || !tclassValue || !tstatusValue) {

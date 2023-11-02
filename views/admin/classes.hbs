@@ -282,29 +282,43 @@
                 <!-- Basic Bootstrap Table -->
                 <div class="card col-12 mb-5">
                   <h5 class="card-header">Teachers List</h5>
+                  <button class="btn btn-primary add-class-button" onclick="addClassPrompt()">Add Class</button>
                   <div class="table-responsive text-nowrap">
                     <table class="table">
                       <thead>
                         <tr>
-                          <th>Name</th>
                           <th>Class</th>
-                          <th>Status</th>
+                          <th>Teacher</th>
+                          <th>Max Count Of Students</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody class="table-border-bottom-0">
-                        <div class="container position-relative">
-                          <h1 class="text-center">Classes List</h1>
-                          <ul class="list-group">
-                            {{#each classes}}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                              {{name}}
-                              <button class="btn btn-danger" onclick="deleteClass('{{name}}')">Delete</button>
-                            </li>
-                            {{/each}}
-                          </ul>
-                          <button class="btn btn-primary add-class-button" onclick="addClassPrompt()">Add Class</button>
-                        </div>
+                        {{#each classes}}
+                        <tr>
+                          <td>{{name}}</td>
+                          <td>{{cls_teacher}}</td>
+                          <td id="changeclass">{{cls_count}}</td>
+                          <td>
+                            <div class="dropdown">
+                              <button type="button" class="btn ps-3 dropdown-toggle hide-arrow"
+                                data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                  data-bs-target="#modalTop{{@index}}"><i class="bx bx-edit-alt me-1"></i>
+                                  Edit
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="deleteClass('{{name}}')"><i class="bx bx-trash me-1"></i>
+                                  Delete</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+
+
+                        {{/each}}
 
 
                       </tbody>
@@ -313,7 +327,7 @@
                 </div>
 
               </div>
-              {{#each teachers}}
+              {{#each classes}}
               <!-- Modal -->
               <div class="modal modal-top fade" id="modalTop{{@index}}" tabindex="-1">
                 <div class="modal-dialog">
@@ -326,14 +340,18 @@
                       <div class="row">
                         <div class="col mb-3">
                           <label for="nmae" class="form-label">Email</label>
-                          <input type="text" class="form-control nmae" placeholder="{{email}}" value="{{email}}"
+                          <input type="text" class="form-control nmae" placeholder="{{name}}" value="{{name}}"
                             disabled />
                         </div>
                       </div>
                       <div class="row g-2">
                         <div class="col mb-0">
                           <label class="form-label">Class</label>
-                          <input type="text" class="form-control tclass" placeholder="Enter Class" />
+                          <select class="form-select tclasses" name="class">
+                            {{#each ../classes}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                          </select>
                         </div>
                         <div class="col mb-0">
                           <label for="tstatus" class="form-label">Status</label>
@@ -355,6 +373,7 @@
                 </div>
               </div>
               {{/each}}
+              
               <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
                 <div class="row">
                   <div class="col-6 mb-4">

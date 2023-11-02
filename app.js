@@ -9,6 +9,11 @@ const passport = require('./.config/auth.js');
 const auto_attendence = require('./services/auto_attendences')
 const cron = require('node-cron')
 require('./services/mailsender')
+const isholiday = require('./services/holiday');
+
+const to = new Date()
+
+const check = isholiday(to)
 
 
 
@@ -33,10 +38,20 @@ app.use(require("express-session")({
   cookie: { secure: false } 
 }))
 
+
 cron.schedule('0 9 * * *', async () => {
-  await auto_attendence();
-  console.log('auto_attendance successflly');
-});
+  const check = isholiday(new Date())
+  if (check === false) {
+    if (today.getDay() !== 0) {
+      await auto_attendence();
+      console.log('auto_attendance successfully');
+    } else {
+      console.log('Today is Sunday, no attendance required.');
+    }
+  } else {
+    console.log('Today is a holiday, no attendance required.');
+  }
+})
 
 
 // view engine setup

@@ -24,8 +24,11 @@ router.get('/teachers', async (req, res) => {
     try {
       const teachers = await Teacher.find();
   
-      // Render the 'teachers' view and pass the 'teachers' data to it
-      res.render(path.join(__dirname, '../views/admin/teachers'), { teachers: teachers });
+      const datas = await Classes.find();
+      const data = datas.map((d)=> d.name)
+      console.log(data);
+res.render(path.join(__dirname, '../views/admin/teachers'), { teachers: teachers, classes: data })
+
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal server error');
@@ -61,7 +64,7 @@ router.get('/teachers', async (req, res) => {
       }
       student.roll = tclass;
       student.status = tstatus;
-      await student.save(); // Save the updated document
+      await student.save(); 
   
       console.log('student status updated successfully');
       res.json(student)
@@ -124,32 +127,78 @@ router.post('/new_pass',async (req,res)=>{
 
 
 router.post('/change_statuss', async (req, res) => {
-    const { nmae, tstatus , tclass } = req.body;
+  const { nmae, tstatus, tclass } = req.body;
 
-    if (!nmae || !tstatus) {
-        console.log('Name or Status missing in the request body');
-        return res.status(400).send('Name or Status missing');
-    }
+  if (!nmae || !tstatus) {
+      console.log('Name or Status missing in the request body');
+      return res.status(400).send('Name or Status missing');
+  }
 
-    try {
-        const teacher = await Teacher.findOne({ email: nmae });
+  try {
+      const teacher = await Teacher.findOne({ email: nmae });
 
-        if (!teacher) {
-            console.log('Teacher not found');
-            return res.status(404).send('Teacher not found');
-        }
-        teacher.class = tclass;
-        teacher.status = tstatus; 
-        await teacher.save(); 
-        teacher.status == 'active' ? verify_teacher(teacher.email) : teacher.status = 'rejected' ? reject_teacher(teacher.email) : console.log('pending')
-        console.log('Teacher status updated successfully');
-        res.json(teacher)
-    } catch (error) {
-        console.log('Error updating teacher status');
-        console.log(error);
-        return res.status(500).send('Internal Server Error');
-    }
+      if (!teacher) {
+          console.log('Teacher not found');
+          return res.status(404).send('Teacher not found');
+      }
+
+      // Find any existing teacher in the intended class and set their class to 'not specified'
+      const existingTeacher = await Teacher.findOne({ class: tclass });
+      if (existingTeacher && String(existingTeacher._id) !== String(teacher._id)) {
+          existingTeacher.class = 'not specified';
+          await existingTeacher.save();
+      }
+
+      // Update the current teacher's status and class assignment
+      teacher.class = tclass;
+      teacher.status = tstatus;
+      await teacher.save();
+
+      if (teacher.status === 'active') {
+          verify_teacher(teacher.email);
+      } else if (teacher.status === 'rejected') {
+          reject_teacher(teacher.email);
+      } else {
+          console.log('pending');
+      }
+
+      console.log('Teacher status updated successfully');
+      
+      // If you have an `assignTeacherToClass` function to make further assignments or notifications
+      await assignTeacherToClass(teacher._id, tclass);
+
+      res.json(teacher);
+
+  } catch (error) {
+      console.log('Error updating teacher status');
+      console.log(error);
+      return res.status(500).send('Internal Server Error');
+  }
 });
+
+
+async function assignTeacherToClass(teacherId, className) {
+  const teacher = await Teacher.findById(teacherId);
+  if (!teacher) {
+      console.log('Teacher not found');
+      return;
+  }
+
+  const previousClass = await Classes.findOne({ cls_teacher: teacher.name });
+  if (previousClass) {
+      previousClass.cls_teacher = null;
+      await previousClass.save();
+  }
+
+  const newClass = await Classes.findOne({ name: className });
+  if (newClass) {
+      newClass.cls_teacher = teacher.name;
+      await newClass.save();
+  } else {
+      console.log('New class not found');
+  }
+}
+
 
 router.post('/classes', async (req, res) => {
   try {
