@@ -11,7 +11,7 @@ require('dotenv').config();
 const auth = require('../.config/student_auth')
 const jwt = require('jsonwebtoken')
 const Classes = require('../model/classes');
-var mongodb = require('./.config/dbconnect')
+var mongodb = require('../.config/dbconnect')
 
 async function main () {
   await mongodb();
