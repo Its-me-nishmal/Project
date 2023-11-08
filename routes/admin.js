@@ -13,12 +13,14 @@ const Students = require('../model/Students');
 const Classes = require('../model/classes')
 const Parents = require('../model/Parents')
 const {verify_teacher , reject_teacher,notifications} = require('../services/mailsender')
+const mongodb = require('../.config/dbconnect')
 
 
 
 router.get('/', auth, async (req, res) => {
   if (req.cookies.admin_token) {
     try {
+      await mongodb()
       const admin = await AdminModel.findOne({ tokens: req.cookies.admin_token });
       
       if (admin) {
