@@ -113,6 +113,7 @@ router.get('/classes',async(req,res)=>{
 //     })
 //     let ok = await admin.save()
 //     console.log(ok);
+//     res.send('success')
 // })
 
 
