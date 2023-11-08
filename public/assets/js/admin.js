@@ -1,5 +1,5 @@
 // did = document.getElementById(id)
-function did(...ids) {return ids.map(id => document.getElementById(id));}
+function did(...ids) { return ids.map(id => document.getElementById(id)); }
 
 function showAdminModal() {
   const adminEmail = document.getElementById('adminEmail').textContent;
@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const [modalok] = did('modalok');
   if (modalok) {
     const [email, password, repassword] = did('adEmail', 'adminPassword', 'adminRePassword');
-    modalok.addEventListener('click', async (e)=>email.value === '' || email.value === 'admin@example.com' ? showtoast('change email and try again'): password.value === '' || password.value !== repassword.value ? showtoast('password not match') : adminchange(email.value,password.value))
-  }  
+    modalok.addEventListener('click', async (e) => email.value === '' || email.value === 'admin@example.com' ? showtoast('change email and try again') : password.value === '' || password.value !== repassword.value ? showtoast('password not match') : adminchange(email.value, password.value))
+  }
 });
 
 
@@ -48,7 +48,7 @@ function showtoast(msg) {
   alert(msg)
 }
 
-  
+
 
 async function adminchange(email, password) {
   const validationResult = validation(email, password);
@@ -67,7 +67,7 @@ async function adminchange(email, password) {
 
       const data = await response.json();
 
-      if(!document.cookie.admin_token) window.location.href = '/admin/login'
+      if (!document.cookie.admin_token) window.location.href = '/admin/login'
     } catch (err) {
       console.error(err);
     }
@@ -102,19 +102,26 @@ function validation(email, password) {
   return "Valid";
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const changestatusButtons = document.querySelectorAll('.changestatus');
 
   changestatusButtons.forEach((button) => {
     button.addEventListener('click', async (e) => {
       e.preventDefault();
+      const modal = button.closest('.modal-top');
+
+      if (!modal) {
+        console.error("Modal not found");
+        return;
+      }
 
       // Traverse the DOM to find the closest parent form and then find the associated inputs
-      const form = button.closest('form') || button.closest('div'); 
+      const form = button.closest('form') || button.closest('div');
       const selectedOption = form.querySelector('.tclasses');
       const tclassValue = selectedOption.value;
       const tstatusValue = form.querySelector('.tstatus').value;
       const nmaeValue = form.querySelector('.nmae').value;
+      const clickout = document.querySelector('.modalclickkkout')
       if (!nmaeValue || !tclassValue || !tstatusValue) {
         alert('Fields cannot be empty');
       } else {
@@ -127,10 +134,26 @@ document.addEventListener("DOMContentLoaded", function() {
           if (!response.ok) throw new Error('Failed to save data');
           const data = await response.json();
           if (data) {
-            window.location.reload();
+            modal.classList.remove('show');
+            modal.setAttribute('aria-modal', 'false');
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.classList.remove('in');
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `status of ${data.name} changed to ${data.status}`,
+              showConfirmButton: false,
+              timer: 2000
+            });
           }
         } catch (err) {
-          console.error(err);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: `${err}`,
+            showConfirmButton: false,
+            timer: 3000
+          });
         }
       }
     });

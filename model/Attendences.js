@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const AttendSchema = new mongoose.Schema({
     date : { type: Date, default: new Date  , required: true , unique: true},
+    holi: {default: false, type: String},
     students : [ { std_id: { type :  mongoose.Schema.Types.ObjectId, ref:'Students' , required: true},
     isPresent : {type: Boolean, default: true}}]
 },{versionKey: false})

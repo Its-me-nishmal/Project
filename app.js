@@ -6,10 +6,13 @@ var logger = require('morgan');
 var mongoose = require('mongoose')
 var mongodb = require('./.config/dbconnect')
 const passport = require('./.config/auth.js');
-const auto_attendence = require('./services/auto_attendences')
+const { auto_attendance, auto_holi_attendance }= require('./services/auto_attendences')
 const cron = require('node-cron')
 require('./services/mailsender')
 const isholiday = require('./services/holiday');
+const auto_leave = require('./services/auto_leave')
+const { isSunday } = require('date-fns');
+
 
 const to = new Date()
 
@@ -26,7 +29,47 @@ const adminRouter = require('./routes/admin');
 const teacherRouter = require('./routes/teacher');
 const parentRouter = require('./routes/parent');
 const Attendences = require('./model/Attendences');
+const {Worker, isMainThread} = require('worker_threads')
 
+if (isMainThread) {
+  const worker = new Worker('./workers.js');
+
+  cron.schedule('10 15 * * *', async () => {
+    const check = isholiday(new Date());
+  
+  if (check === false) {
+    if (!isSunday(new Date())) {
+      worker.postMessage({ type: 'auto_attendance' });
+      console.log('auto_attendance successfully');
+      await auto_attendance();
+    } else {
+      console.log('Today is Sunday, no attendance required.');
+    }
+  } else {
+    worker.postMessage({ type: 'auto_holi_attendance' });
+    console.log('auto_holi_attendance successfully');
+    await auto_holi_attendance()
+  }
+  });
+
+  
+
+  cron.schedule('59 9 * * *',async () => {
+    const check = isholiday(new Date());
+
+    if (check === false) {
+      if (!isSunday(new Date())) {
+        worker.postMessage({ type: 'auto_leave' });
+        console.log('oo') 
+        await auto_leave()
+      } else {
+        console.log('Today is Sunday, no leave information required.');
+      }
+    } else {
+      console.log('Today is a holiday, no leave information required.');
+    }
+  });
+}
 
 var app = express();
 
@@ -39,19 +82,15 @@ app.use(require("express-session")({
 }))
 
 
-cron.schedule('0 9 * * *', async () => {
-  const check = isholiday(new Date())
-  if (check === false) {
-    if (today.getDay() !== 0) {
-      await auto_attendence();
-      console.log('auto_attendance successfully');
-    } else {
-      console.log('Today is Sunday, no attendance required.');
-    }
-  } else {
-    console.log('Today is a holiday, no attendance required.');
-  }
-})
+app.get('/onesignal.js', (req, res) => {
+  res.sendFile(__dirname + '/public/onesignal.js');
+});
+
+
+
+
+
+
 
 
 // view engine setup
@@ -76,7 +115,7 @@ app.use('/admin', adminRouter)
 app.use('/teacher', teacherRouter);
 app.use('/parent', parentRouter);
 
-// catch 404 and forward to error handler
+
 app.use(function(req, res, next) {
   next(createError(404));
 });

@@ -131,4 +131,21 @@ router.post("/profile/update/parent",auth,async(req,res)=>{
   } catch(e){console.log(e);}
 })
 
+router.get('/notifications',(req,res)=>{
+  const notifications = [
+    {
+        content: "New notification 1",
+        time: "2023-11-07 10:00 AM",
+        read: false,
+    },
+    {
+        content: "New notification 2",
+        time: "2023-11-07 11:00 AM",
+        read: true,
+    },
+    // Add more notifications here
+];
+res.render(path.join(__dirname,'../views/student/notifications'), { notifications })
+})
+
 module.exports = router;

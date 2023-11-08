@@ -71,5 +71,39 @@ table.es-table-not-adapt, .esd-block-html table { width:auto!important } .es-soc
         }
     });
     }
+    const student_leave = (recipient) => {
+        var mailOptions = {
+            from: 'nishmal@gmail.com',
+            to: recipient,
+            subject: 'From CMS',
+            text: "student not attended today"
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+        }
 
-module.exports = {verify_teacher,reject_teacher}
+        const notifications = (recipient,text) => {
+            var mailOptions = {
+                from: 'nishmal@gmail.com',
+                to: recipient,
+                subject: 'From CMS',
+                text: text
+            };
+            
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            }
+
+
+module.exports = {verify_teacher,reject_teacher,student_leave,notifications}

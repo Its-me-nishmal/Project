@@ -108,6 +108,12 @@ document.addEventListener("DOMContentLoaded", function() {
   changestatusButtons.forEach((button) => {
     button.addEventListener('click', async (e) => {
       e.preventDefault();
+      const modal = button.closest('.modal-top');
+
+      if (!modal) {
+        console.error("Modal not found");
+        return;
+      }
 
       // Traverse the DOM to find the closest parent form and then find the associated inputs
       const form = button.closest('form') || button.closest('div'); 
@@ -126,10 +132,26 @@ document.addEventListener("DOMContentLoaded", function() {
           if (!response.ok) throw new Error('Failed to save data');
           const data = await response.json();
           if (data) {
-            window.location.reload();
+            modal.classList.remove('show');
+            modal.setAttribute('aria-modal', 'false');
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.classList.remove('in');
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `status of ${data.name} changed to ${data.status}`,
+              showConfirmButton: false,
+              timer: 2000
+            });
           }
         } catch (err) {
-          console.error(err);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: `${err}`,
+            showConfirmButton: false,
+            timer: 3000
+          });
         }
       }
     });

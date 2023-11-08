@@ -11,13 +11,36 @@ require('dotenv').config();
 const auth = require('../.config/admin_auth');
 const Students = require('../model/Students');
 const Classes = require('../model/classes')
-const {verify_teacher , reject_teacher} = require('../services/mailsender')
+const Parents = require('../model/Parents')
+const {verify_teacher , reject_teacher,notifications} = require('../services/mailsender')
 
 
 
-router.get('/',auth,(req,res)=> req.cookies.admin_token
-? res.render(path.join(__dirname,'../views/admin/index'),{admin : req.admin})
-: res.redirect('/admin/login'))
+router.get('/', auth, async (req, res) => {
+  if (req.cookies.admin_token) {
+    try {
+      const admin = await AdminModel.findOne({ tokens: req.cookies.admin_token });
+      
+      if (admin) {
+        const teachers = await Teacher.find();
+        const classes = await Classes.find();
+        const students = await Students.find();
+        const parents = await Parents.find();
+        
+        res.render(path.join(__dirname, '../views/admin/index'), {
+          admin: req.admin,teachers,classes,students,parents
+        });
+      } else {
+        res.redirect('/admin/login');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  } else {
+    res.redirect('/admin/login');
+  }
+});
 
 router.get('/login',  (req,res)=>res.render(path.join(__dirname,'../views/admin/login')))
 router.get('/teachers', async (req, res) => {
@@ -142,14 +165,11 @@ router.post('/change_statuss', async (req, res) => {
           return res.status(404).send('Teacher not found');
       }
 
-      // Find any existing teacher in the intended class and set their class to 'not specified'
       const existingTeacher = await Teacher.findOne({ class: tclass });
       if (existingTeacher && String(existingTeacher._id) !== String(teacher._id)) {
           existingTeacher.class = 'not specified';
           await existingTeacher.save();
       }
-
-      // Update the current teacher's status and class assignment
       teacher.class = tclass;
       teacher.status = tstatus;
       await teacher.save();
@@ -164,7 +184,6 @@ router.post('/change_statuss', async (req, res) => {
 
       console.log('Teacher status updated successfully');
       
-      // If you have an `assignTeacherToClass` function to make further assignments or notifications
       await assignTeacherToClass(teacher._id, tclass);
 
       res.json(teacher);
@@ -229,6 +248,40 @@ router.delete('/classes/:name', async (req, res) => {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
+});
+
+router.get('/notifications',(req,res)=>res.render(path.join(__dirname,'../views/admin/notifications')))
+
+
+router.post('/notify', async (req, res) => {
+  const { category, newValue, specialEmail } = req.body;
+  console.log(category)
+  if (category === 'Students') {
+    const students = await Students.find();
+    
+    students.forEach(student => {
+      notifications(student.email, newValue);
+    });
+    
+  } else if (category === 'Parents') {
+    const parents = await Parents.find();
+    
+    parents.forEach(parent => {
+      notifications(parent.email, newValue);
+    });
+    
+  } else if (category === 'Teachers') {
+    const teachers = await Teacher.find();
+    
+    teachers.forEach(teacher => {
+      notifications(teacher.email, newValue);
+    });
+    
+  } else {
+    notifications(specialEmail, newValue);
+  }
+  
+  res.json({ message: 'Emails sent successfully' });
 });
 
 

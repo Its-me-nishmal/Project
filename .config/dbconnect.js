@@ -5,10 +5,7 @@ async function connect ()  {
     try {
         console.log(url);
         await mongoose.connect (
-            url, {
-            useNewUrlParser : true,
-            useUnifiedTopology : true
-        })
+            url, {})
         console.log('connected to mongo DB');
     } catch (error) {
         console.log(error);
