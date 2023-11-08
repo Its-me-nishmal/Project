@@ -5,15 +5,14 @@ const { url } = require('./dbconfig');
 mongoose.connection.on('error', (error) => {
   console.error('Mongoose connection error:', error);
 });
-
-async function connect() {
-  try {
-    console.log(url);
-    await mongoose.connect(url);
-    console.log('MongoDB connected successfully');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-  }
+const connect = async() =>{
+    try {
+        console.log(url);
+        await mongoose.connect(url);
+        console.log('MongoDB connected successfully');
+      } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+      }
 }
 
 module.exports = connect;

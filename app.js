@@ -19,11 +19,7 @@ const to = new Date()
 const check = isholiday(to)
 
 
-async function main () {
-  await mongodb();
-}
-main();
-
+mongodb();
 
 
 var indexRouter = require('./routes/index');
