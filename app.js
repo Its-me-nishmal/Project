@@ -19,7 +19,10 @@ const to = new Date()
 const check = isholiday(to)
 
 
-
+async function main () {
+  await mongodb();
+}
+main();
 
 
 
@@ -120,10 +123,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-async function main () {
-  await mongodb();
-}
-main();
+
 
 
 // error handler
