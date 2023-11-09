@@ -11,7 +11,7 @@ const StudentSchema = new mongoose.Schema({
     parent: String,
     tokens : String,
     amount : String,
-    roll : { type: String, default: "Student"  , required: true , unique: true},
+    roll : { type: String, default: "Student"  , required: true },
   });
  
 const Students = mongoose.model('Students',StudentSchema);
