@@ -12,6 +12,8 @@ const auth = require('../.config/student_auth')
 const jwt = require('jsonwebtoken')
 const Classes = require('../model/classes');
 const clearRequire = require('clear-require');
+const Razorpay = require('razorpay');
+const PaymentModel = require('../model/Payments');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -148,7 +150,10 @@ function generateFavoriteBooks(favoriteIds) {
   });
 }
 
-
+const razorpay = new Razorpay({
+  key_id: process.env.PAY_KEY,
+  key_secret: process.env.PAY_ID,
+});
 
 router.get('/ebooks', auth, async (req, res) => {
   try {
@@ -169,6 +174,79 @@ router.get('/ebooks', auth, async (req, res) => {
   }
 });
 
+router.get('/payments', auth, async (req, res) => {
+  try {
+    if (req.cookies.student_token && req.student.roll !== 'admin') {
+      // If admin, just render the page without payments
+      res.render(path.join(__dirname, '../views/student/payments'), { student: req.student, Leader: 'leader' });
+    } else if (req.cookies.student_token) {
+      // If student, fetch payments and render the page
+      const studentId = req.student._id;
+
+      // Fetch payments for the current student
+      console.log(studentId)
+      const payments = await PaymentModel.find({ student: studentId });
+
+      res.render(path.join(__dirname, '../views/student/payments'), { student: req.student, payments: payments });
+    } else {
+      // Redirect to login if not authenticated
+      res.redirect('/student/login');
+    }
+  } catch (error) {
+    console.error('Error rendering page:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.post('/create-razorpay-order',auth, async (req, res) => {
+  try {
+    const { orderId, amount } = req.body;
+    const razorpayOptions = {
+      key: process.env.PAY_KEY,
+      amount: amount * 100,
+      currency: 'INR',
+      name: 'Your Company Name',
+      description: 'Payment for Order',
+      image: 'your_company_logo_url',
+      prefill: {
+        name: 'Customer Name',
+        email: 'customer@example.com',
+        contact: '1234567890',
+      },
+    };
+
+    res.json({ razorpayOptions });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+router.post('/pay', async (req, res) => {
+  try {
+    const { objId, payId } = req.body;
+
+    const updatedPayment = await PaymentModel.findOneAndUpdate(
+      { _id: objId },
+      {
+        $set: {
+          isPaid: true,
+          paymentId: payId || '',
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedPayment) {
+      return res.status(404).json({ success: false, message: 'Payment not found.' });
+    }
+
+    res.status(200).json({ success: true, message: 'Payment updated successfully.' });
+  } catch (error) {
+    console.error('Error updating payment:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
 
 router.get('/register', async (req, res) => {
   try {

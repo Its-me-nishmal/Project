@@ -12,6 +12,7 @@ const auth = require('../.config/admin_auth');
 const Students = require('../model/Students');
 const Classes = require('../model/classes')
 const Parents = require('../model/Parents')
+const Payments = require('../model/Payments')
 const { verify_teacher, reject_teacher, notifications } = require('../services/mailsender')
 const mongodb = require('../.config/dbconnect')
 
@@ -144,6 +145,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+
 router.post('/new_pass', async (req, res) => {
   const { email, password } = req.body
   console.log(email);
@@ -237,6 +240,55 @@ router.post('/classes', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+router.get('/payments', async (req, res) => {
+  try {
+    const students = await Students.find();
+    res.status(200).render(path.join(__dirname, '../views/admin/payments'), { students })
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/make-payments', async (req, res) => {
+  try {
+    const selectedStudentIdsString = req.body.ids;
+    const globalAmount = req.body.amount;
+    const reason = req.body.reason;
+  
+    console.log('Selected Student IDs:', selectedStudentIdsString);
+    console.log('Global Amount:', globalAmount);
+    // Ensure that at least one student is selected
+    if (!selectedStudentIdsString || selectedStudentIdsString.length === 0) {
+      return res.status(400).json({ success: false, message: 'Please select at least one student.' });
+    }
+
+    // Fetch selected students from the database
+    const selectedStudents = await Students.find({ _id: { $in: selectedStudentIdsString } });
+
+    // Process payments for selected students
+    const paymentPromises = selectedStudents.map(student => {
+      const payment = new Payments({
+        amount: globalAmount,
+        student: student._id,
+        reason: reason
+      });
+
+      return payment.save();
+    });
+
+    // Wait for all payments to be saved
+    await Promise.all(paymentPromises);
+
+    // Respond with a success message
+    res.status(200).json({ success: true, message: 'Payments processed successfully.' });
+  } catch (error) {
+    console.error('Error processing payments:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 });
 
