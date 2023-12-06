@@ -11,6 +11,7 @@ require('dotenv').config();
 const auth = require('../.config/student_auth')
 const jwt = require('jsonwebtoken')
 const Classes = require('../model/classes');
+const clearRequire = require('clear-require');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -18,14 +19,156 @@ const Classes = require('../model/classes');
 //     return res.render(path.join(__dirname,'../views/student/student.hbs'));
 //   res.redirect('/student/login');
 // });
+// Replace with your actual YouTube playlist ID
+
+  const fetchVideos = async () => {
+    const apiKey = process.env.YT; // Replace with your actual YouTube API key
+    const playlistId = 'PLY-ecO2csVHeJuOTlzJyNEC0FctWKx0yS';// Replace with your actual YouTube playlist ID
+  
+    try {
+      // Fetch video details including videoId
+      const response = await fetch(
+        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&key=${apiKey}&maxResults=50`
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const responseData = await response.json();
+  
+      // Extract videoIds from the first API call
+      const videoIds = responseData.items.map(item => item.contentDetails.videoId).join(',');
+  
+      // Fetch video statistics using the extracted videoIds
+      const statisticsResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${apiKey}`
+      );
+  
+      if (!statisticsResponse.ok) {
+        throw new Error(`HTTP error! Status: ${statisticsResponse.status}`);
+      }
+  
+      const statisticsData = await statisticsResponse.json();
+  
+      // Combine information from both API calls
+      const videos = responseData.items.map(item => {
+        const videoStatistics = statisticsData.items.find(statisticsItem => statisticsItem.id === item.contentDetails.videoId).statistics;
+  
+        return {
+          title: item.snippet.title,
+          description: videoStatistics ? videoStatistics.viewCount : '0',
+          thumbnail: item.snippet.thumbnails.medium.url,
+          videoId: item.contentDetails.videoId,
+        };
+      });
+  
+      console.log(videos);
+      return videos;
+    } catch (error) {
+      console.error('Error fetching videos:', error.message);
+      return [];
+    }
+  };
+  
 
 
 
+router.get('/', auth, async (req, res) => {
+  try {
+    const videos = await fetchVideos();
 
-router.get('/',auth,(req,res)=> req.cookies.student_token
-&& req.student.roll == 'admin' ? res.render(path.join(__dirname,'../views/student/student'),{student : req.student,Leader:"leader"})
-: req.cookies.student_token ? res.render(path.join(__dirname,'../views/student/student'),{student : req.student})
-: res.redirect('/student/login'))
+    if (req.cookies.student_token && req.student.roll === 'admin') {
+      res.render(path.join(__dirname, '../views/student/student'), { student: req.student, Leader: 'leader', videos });
+    } else if (req.cookies.student_token) {
+      res.render(path.join(__dirname, '../views/student/student'), { student: req.student, videos });
+    } else {
+      res.redirect('/student/login');
+    }
+  } catch (error) {
+    console.error('Error rendering page:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Function to fetch ebooks from Open Library API using fetch
+// async function fetchEbooks() {
+//   try {
+//     // You can customize the query parameters based on your requirements
+//     const response = await fetch('https://openlibrary.org/subjects/ebooks.json?limit=10');
+
+//     if (!response.ok) {
+//       throw new Error(`Error fetching ebooks: ${response.statusText}`);
+//     }
+
+//     const responseData = await response.json();
+
+//     // Extract relevant information from the response
+//     const ebooks = responseData.works.map(work => ({
+//       title: work.title,
+//       author: work.authors ? work.authors[0].name : 'Unknown Author',
+//       coverUrl: `https://covers.openlibrary.org/b/id/${work.cover_id}-L.jpg`,
+//       contentUrl: `https://openlibrary.org${work.key}`, // Example link to Open Library page
+//       // Add more fields as needed
+//     }));
+
+//     return ebooks;
+//   } catch (error) {
+//     console.error('Error fetching ebooks from Open Library API:', error.message);
+//     throw error;
+//   }
+// }
+let generatedObjects = [];
+
+function randomBooks() {
+  for (let i = 0; i < 3; i++) {
+    let randomId = Math.floor(Math.random() * (50000 - 10000 + 1)) + 10000;
+    let newObject = {
+      id: randomId,
+      iframe: `https://www.gutenberg.org/cache/epub/${randomId}/pg${randomId}-images.html`,
+      covers: [
+        `https://www.gutenberg.org/cache/epub/${randomId}/pg${randomId}.cover.medium.jpg`,
+      ]
+    };
+    generatedObjects.push(newObject);
+  }
+
+  return generatedObjects; // Return the generated objects
+}
+
+function generateFavoriteBooks(favoriteIds) {
+  return favoriteIds.map(id => {
+    return {
+      id,
+      iframe: `https://www.gutenberg.org/cache/epub/${id}/pg${id}-images.html`,
+      covers: [
+        `https://www.gutenberg.org/cache/epub/${id}/pg${id}.cover.medium.jpg`,
+      ]
+    };
+  });
+}
+
+
+
+router.get('/ebooks', auth, async (req, res) => {
+  try {
+    clearRequire.all();
+    const favorites = JSON.parse(req.cookies.fav || '[]');
+    const favoriteBooks = generateFavoriteBooks(favorites);
+    const generatedObjects = randomBooks();
+    if (req.cookies.student_token && req.student.roll === 'admin') {
+      res.render(path.join(__dirname, '../views/student/E-Books'), { student: req.student, Leader: 'leader', generatedObjects, favoriteBooks });
+    } else if (req.cookies.student_token) {
+      res.render(path.join(__dirname, '../views/student/E-Books'), { student: req.student, generatedObjects, favoriteBooks });
+    } else {
+      res.redirect('/student/login');
+    }
+  } catch (error) {
+    console.error('Error rendering page:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 router.get('/register', async (req, res) => {
   try {

@@ -48,80 +48,78 @@
     <script src="../assets/js/config.js"></script>
   </head>
 
-  <body>
-    <!-- Content -->
-
-    <div class="container-xxl">
-      <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
-          <!-- Register -->
-          <div class="card">
-            <div class="card-body">
-              <!-- Logo -->
-              <div class="app-brand justify-content-center">
-                <a href="index.html" class="app-brand-link gap-2">
-                  <span class="app-brand-logo demo">
-                    <img src="../assets/img/logo/trans.png" width="100px" alt="">
-                  </span>
-                  <span class="app-brand-text demo text-body fw-bold">ST. Thomas</span>
-                </a>
-              </div>
-              <!-- /Logo -->
-              <h4 class="mb-2">Welcome to ST. Thomas! 👋</h4>
-              <p class="mb-4" id="changelog">Please sign-in to your account and start the adventure</p>
-
-              <form id="formAuthentication" class="mb-3" action="/parent/login" method="POST">
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    autofocus />
-                </div>
-                <div class="mb-3 form-password-toggle">
-                  <div class="d-flex justify-content-between">
-                    <label class="form-label" for="phone">Phone</label>
-                    <a href="auth-forgot-password-basic.html">
-                      <small>Forgot Password?</small>
-                    </a>
-                  </div>
-                  <div class="input-group input-group-merge">
-                    <input
-                      type="phone"
-                      id="phone"
-                      class="form-control"
-                      name="phone"
-                      placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                      aria-describedby="password" />
-                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember-me" />
-                    <label class="form-check-label" for="remember-me"> Remember Me </label>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" id="submit" type="submit">Sign in</button>
-                </div>
-              </form>
-
-              <p class="text-center">
-                <span>New on our platform?</span>
-                <a href="/student/register">
-                  <span>Create an account</span>
-                </a>
-              </p>
+  
+<body>
+  <div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+      <div class="authentication-inner">
+        <div class="card">
+          <div class="card-body">
+            <div class="app-brand justify-content-center">
+              <a href="index.html" class="app-brand-link gap-2">
+                <span class="app-brand-logo demo">
+                  <img src="../assets/img/logo/trans.png" width="100px" alt="">
+                </span>
+                <span class="app-brand-text demo text-body fw-bold">ST. Thomas</span>
+              </a>
             </div>
+            <h4 class="mb-2">Welcome to ST. Thomas! 👋</h4>
+            <p class="mb-4" id="changelog">Please sign-in to your account and start the adventure</p>
+
+            <form id="formAuthentication" class="mb-3" action="/parent/login" method="POST">
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" autofocus />
+              </div>
+              <div class="mb-3" id="otpSection" style="display:none;">
+                <label for="otp" class="form-label">One-Time Password (OTP)</label>
+                <input type="text" id="otp" class="form-control" name="otp" placeholder="Enter OTP" aria-describedby="otp" />
+              </div>
+              <button type="button" class="btn btn-link" id="verifyBtn" onclick="sendOTP()">Send OTP</button>
+              <div class="spinner-border text-primary d-none" id="loadingSpinner" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="remember-me" />
+                  <label class="form-check-label" for="remember-me"> Remember Me </label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <button class="btn btn-primary d-grid w-100" id="submit" type="submit">Sign in</button>
+              </div>
+            </form>
+
+            <p class="text-center">
+              <span>New on our platform?</span>
+              <a href="/student/register">
+                <span>Create an account</span>
+              </a>
+            </p>
           </div>
-          <!-- /Register -->
         </div>
       </div>
     </div>
+  </div>
+
+  <script>
+    function sendOTP() {
+      // Display the loading spinner
+      document.getElementById('loadingSpinner').classList.remove('d-none');
+      
+      // Implement logic to send OTP to the user's phone number
+      // This can be done using AJAX to communicate with a server endpoint
+      // For now, just show the OTP input field for demonstration purposes
+      setTimeout(function() {
+        document.getElementById('otpSection').style.display = 'block';
+        // Hide the loading spinner after showing the OTP input field
+        document.getElementById('loadingSpinner').classList.add('d-none');
+        alert('OTP sent to your phone number!');
+      }, 2000); // Simulating a delay for demonstration purposes (replace with your actual OTP sending logic)
+    }
+  </script>
+
+
 
     <!-- / Content -->
 
