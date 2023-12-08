@@ -6,6 +6,7 @@ const passport = require('passport');
 const mongoose = require('mongoose')
 const Students = require('../model/Students');
 const Parents = require('../model/Parents');
+const Attendences = require('../model/Attendences')
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const auth = require('../.config/student_auth')
@@ -14,6 +15,7 @@ const Classes = require('../model/classes');
 const clearRequire = require('clear-require');
 const Razorpay = require('razorpay');
 const PaymentModel = require('../model/Payments');
+const ObjectId = mongoose.Types.ObjectId;
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -135,7 +137,7 @@ function randomBooks() {
     generatedObjects.push(newObject);
   }
 
-  return generatedObjects; // Return the generated objects
+  return generatedObjects;
 }
 
 function generateFavoriteBooks(favoriteIds) {
@@ -174,22 +176,57 @@ router.get('/ebooks', auth, async (req, res) => {
   }
 });
 
+router.get('/attendences', auth, async (req, res) => {
+  try {
+    const studentId = req.student._id;
+    const att = await Attendences.aggregate([
+      {
+        $match: {
+          'students.std_id': new ObjectId(studentId),
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          date: 1,
+          isPresent: {
+            $filter: {
+              input: '$students',
+              as: 'student',
+              cond: { $eq: ['$$student.std_id', new ObjectId(studentId)] },
+            },
+          },
+        },
+      },
+    ]);
+
+    console.log(att[0]);
+
+    if (req.cookies.student_token && req.student.roll === 'admin') {
+      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, Leader: 'leader', att });
+    } else if (req.cookies.student_token) {
+      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, att });
+    } else {
+      res.redirect('/student/login');
+    }
+  } catch (error) {
+    console.error('Error rendering page:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 router.get('/payments', auth, async (req, res) => {
   try {
     if (req.cookies.student_token && req.student.roll !== 'admin') {
-      // If admin, just render the page without payments
       res.render(path.join(__dirname, '../views/student/payments'), { student: req.student, Leader: 'leader' });
     } else if (req.cookies.student_token) {
-      // If student, fetch payments and render the page
       const studentId = req.student._id;
 
-      // Fetch payments for the current student
       console.log(studentId)
       const payments = await PaymentModel.find({ student: studentId });
 
       res.render(path.join(__dirname, '../views/student/payments'), { student: req.student, payments: payments });
     } else {
-      // Redirect to login if not authenticated
       res.redirect('/student/login');
     }
   } catch (error) {
@@ -369,4 +406,7 @@ router.get('/notifications',(req,res)=>{
 res.render(path.join(__dirname,'../views/student/notifications'), { notifications })
 })
 
+router.get('/solution',(req,res)=>{
+res.render(path.join(__dirname,'../views/student/solution'))
+})
 module.exports = router;

@@ -150,13 +150,13 @@
               <div data-i18n="Analytics">E-books</div>
             </a>
           </li>
-          <li class="menu-item">
+          <li class="menu-item active">
             <a href="/student/solution" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-brain"></i>
               <div data-i18n="Analytics">Solution AI</div>
             </a>
           </li>
-          <li class="menu-item active">
+          <li class="menu-item ">
             <a href="/student/notifications" class="menu-link">
               <i class="menu-icon tf-icons bx bx-bell"></i>
               <div data-i18n="Analytics">Notifications</div>
@@ -298,34 +298,179 @@
                         </ul>
                     </div>
                 </nav>
+                <style>
+/* Add or update these styles to your existing styles */
+.app-chat-history {
+    height: 100%; /* Set the height of the chat container */
+}
 
-                <!-- / Navbar -->
+.chat-history-body {
+    max-height: 400px; /* Set the maximum height of the chat history */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds the container height */
+}
 
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-                    <!-- Content -->
-                    <div class="container mt-4">
-                        <h1>Notifications</h1>
-                        <div class="list-group mt-3">
-                            {{#each notifications}}
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1">{{this.content}}</h5>
-                                    <small>{{this.time}}</small>
-                                </div>
-                                <p class="mb-1">Status:
-                                    {{#if this.read}}
-                                    <span style="color: green;">Read</span>
-                                    {{else}}
-                                    <span style="color: red;">Unread</span>
-                                    {{/if}}
-                                </p>
+/* Adjust styles for user and bot messages as needed */
+.chat-message {
+    display: flex;
+    justify-content: flex-end;
+}
 
-                            </a>
-                            {{/each}}
-                        </div>
-                    </div>
-                    <!-- / Content -->
+.chat-message-left {
+    background-color: #e1e1e1; /* Set background color for bot messages */
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.chat-message-right {
+    background-color: #4caf50; /* Set background color for user messages */
+    color: #fff; /* Set text color for user messages */
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+/* Style for input form */
+.chat-history-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.form-send-message {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.message-input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.send-msg-btn {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+
+                </style>
+<div class="container-xxl flex-grow-1 container-p-y">
+                     <!-- Chat History -->
+ <div class="col app-chat-history">
+        <div class="chat-history-wrapper">
+            <!-- ... (unchanged code) ... -->
+
+            <div class="chat-history-body" id="chat-history">
+                <ul class="list-unstyled chat-history mb-0">
+                    <!-- Existing chat messages -->
+                </ul>
+            </div>
+
+            <!-- Chat message form -->
+            <div class="chat-history-footer">
+                <form class="form-send-message d-flex justify-content-between align-items-center" onsubmit="sendMessage(event)">
+                    <input class="form-control message-input border-0 me-3 shadow-none" id="user-message" placeholder="Type your message here...">
+                    <button type="submit" class="btn btn-primary send-msg-btn">
+                        <i class="bx bx-paper-plane me-md-1 me-0"></i>
+                        <span class="align-middle d-md-inline-block d-none">Send</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- /Chat History -->
+</div>
+
+<script>
+  
+ async function sendMessage(event) {
+            event.preventDefault();
+
+            const userMessage = document.getElementById('user-message').value;
+
+            appendMessage('user', userMessage, 'right');
+
+            const botResponse = await fetchBotResponse(userMessage);
+
+            appendMessage('bot', botResponse, 'left');
+
+            scrollChatToBottom();
+
+            document.getElementById('user-message').value = '';
+        }
+
+        async function fetchBotResponse(userMessage) {
+            const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('http://api.brainshop.ai/get?bid=179383&key=1sybvxe8sqozxKq0&uid=123&msg=' + userMessage)}`;
+            
+            
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return data.cnt;
+            } catch (error) {
+                console.error('Error fetching bot response:', error);
+                return 'Sorry, an error occurred while fetching the response.';
+            }
+        }
+
+// Function to append a message to the chat history
+function appendMessage(sender, message, alignment) {
+    const history = document.getElementById('chat-history');
+    const timestamp = getCurrentTime();
+
+    const messageElement = `<li class="chat-message${alignment === 'left' ? ' chat-message-left' : ''}">
+        <div class="d-flex overflow-hidden">
+            ${alignment === 'right' && sender === 'user' ? `<div class="user-avatar flex-shrink-0 me-3">
+                <div class="avatar avatar-sm">
+                    <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
+                </div>
+            </div>` : ''}
+            <div class="chat-message-wrapper flex-grow-1">
+                <div class="chat-message-text">
+                    <p class="mb-0">${message}</p>
+                </div>
+                <div class="text-${alignment} text-muted mt-1">
+                    <i class='bx bx-check-double text-success'></i>
+                    <small>${timestamp}</small>
+                </div>
+            </div>
+            ${alignment === 'left' && sender === 'bot' ? `<div class="user-avatar flex-shrink-0 ms-3">
+                <div class="avatar avatar-sm">
+                    <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
+                </div>
+            </div>` : ''}
+        </div>
+    </li>`;
+
+    // Append the message to the chat history
+    history.innerHTML += messageElement;
+}
+
+// Function to get the current time
+function getCurrentTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    return `${hours}:${minutes}`;
+}
+
+// Function to scroll the chat to the bottom
+function scrollChatToBottom() {
+    const chatHistory = document.getElementById('chat-history');
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+
+</script>
+    
 
                     <!-- Footer -->
                     <footer class="content-footer footer bg-footer-theme">

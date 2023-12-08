@@ -13,6 +13,32 @@ const isholiday = require('./services/holiday');
 const auto_leave = require('./services/auto_leave')
 const { isSunday } = require('date-fns');
 
+const axios = require('axios');
+
+const apiKey = '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';
+const endpoint = 'https://api.openai.com/v1/chat/completions';
+
+const { Configuration, OpenAIApi } = require("openai"); 
+const readlineSync = require("readline-sync"); 
+require("dotenv").config(); 
+
+
+
+
+
+// Example usage:
+// const conversation = [
+//   { role: 'system', content: 'You are a helpful assistant.' }
+// ];
+
+// generateChatResponse(conversation)
+//   .then((response) => {
+//     console.log('ChatGPT Response:', response);
+//   })
+//   .catch((error) => {
+//     console.error('Error:', error);
+//   });
+
 
 const to = new Date()
 
