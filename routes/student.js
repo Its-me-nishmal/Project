@@ -400,8 +400,7 @@ router.get('/notifications',(req,res)=>{
         content: "New notification 2",
         time: "2023-11-07 11:00 AM",
         read: true,
-    },
-    // Add more notifications here
+    }
 ];
 res.render(path.join(__dirname,'../views/student/notifications'), { notifications })
 })

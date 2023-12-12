@@ -346,6 +346,10 @@ router.post('/notify', async (req, res) => {
   res.json({ message: 'Emails sent successfully' });
 });
 
+router.get('/solution',(req,res)=>{
+  res.render(path.join(__dirname,'../views/admin/solution'))
+  })
+
 
 
 
