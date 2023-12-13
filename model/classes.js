@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const cls = new mongoose.Schema({
     name : String,
-    cls_count : String,
+    playlist_url : String,
     cls_teacher : String,
     playlist: String,
 })

@@ -243,6 +243,18 @@ router.post('/classes', async (req, res) => {
   }
 });
 
+router.post('/courses', async (req, res) => {
+  try {
+    const { id , playlist } = req.body;
+    const cls = await Classes.findById(id)
+    cls.playlist = playlist
+    const data = await cls.save()
+    res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 router.get('/payments', async (req, res) => {
   try {

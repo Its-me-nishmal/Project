@@ -25,9 +25,9 @@ const ObjectId = mongoose.Types.ObjectId;
 // });
 // Replace with your actual YouTube playlist ID
 
-  const fetchVideos = async () => {
+  const fetchVideos = async (id) => {
     const apiKey = process.env.YT; // Replace with your actual YouTube API key
-    const playlistId = 'PLY-ecO2csVHeJuOTlzJyNEC0FctWKx0yS';// Replace with your actual YouTube playlist ID
+    const playlistId = id;// Replace with your actual YouTube playlist ID
   
     try {
       // Fetch video details including videoId
@@ -79,10 +79,14 @@ const ObjectId = mongoose.Types.ObjectId;
 
 
 router.get('/', auth, async (req, res) => {
+  const stdcls = await Classes.findOne({name:req.student.class});
+  console.log(stdcls.playlist);
+      const videos = await fetchVideos(stdcls.playlist);
   try {
-    const videos = await fetchVideos();
 
     if (req.cookies.student_token && req.student.roll === 'admin') {
+      
+
       res.render(path.join(__dirname, '../views/student/student'), { student: req.student, Leader: 'leader', videos });
     } else if (req.cookies.student_token) {
       res.render(path.join(__dirname, '../views/student/student'), { student: req.student, videos });

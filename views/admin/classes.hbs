@@ -106,7 +106,12 @@
                 <div data-i18n="Analytics">Banner</div>
               </a>
             </li>
-
+<li class="menu-item ">
+            <a href="/admin/solution" class="menu-link">
+              <i class="menu-icon tf-icons bx bxs-brain"></i>
+              <div data-i18n="Analytics">Solution AI</div>
+            </a>
+          </li>
 
             
             <!-- Misc -->
@@ -302,7 +307,7 @@
                         <tr>
                           <th>Class</th>
                           <th>Teacher</th>
-                          <th>Max Count Of Students</th>
+                          <th >Courses</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -311,7 +316,7 @@
                         <tr>
                           <td>{{name}}</td>
                           <td>{{cls_teacher}}</td>
-                          <td id="changeclass">{{cls_count}}</td>
+                          <td id="changeclass" class="text-primary k">{{playlist}}</td>
                           <td>
                             <div class="dropdown">
                               <button type="button" class="btn ps-3 dropdown-toggle hide-arrow"
@@ -346,33 +351,28 @@
                 <div class="modal-dialog">
                   <form class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="modalTopTitle{{@index}}">Edit {{name}}'s Datas</h5>
+                      <h5 class="modal-title" id="modalTopTitle{{@index}}">Edit {{name}}th class Datas</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                      
                       <div class="row">
                         <div class="col mb-3">
-                          <label for="nmae" class="form-label">Email</label>
-                          <input type="text" class="form-control nmae" placeholder="{{name}}" value="{{name}}"
-                            disabled />
+                          <label class="form-label">Class Teacher</label>
+                          <input type="text" class="form-control nmae" placeholder="{{cls_teacher}}" value="{{cls_teacher}}"
+                           disabled />
                         </div>
                       </div>
-                      <div class="row g-2">
-                        <div class="col mb-0">
-                          <label class="form-label">Class</label>
-                          <select class="form-select tclasses" name="class">
-                            {{#each ../classes}}
-                            <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                          </select>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="playlist" class="form-label">Course Link</label>
+                          <input type="text" class="form-control playlist" placeholder="{{playlist}}" value="{{playlist}}"
+                            />
                         </div>
-                        <div class="col mb-0">
-                          <label for="tstatus" class="form-label">Status</label>
-                          <select class="form-select tstatus">
-                            <option value="active">Active</option>
-                            <option value="pending">Pending</option>
-                            <option value="rejected">Rejected</option>
-                          </select>
+                        <div class="col mb-3" style="display: none;">
+                          <label for="idd" class="form-label">id</label>
+                          <input type="text" class="form-control idd" placeholder="{{_id}}" value="{{_id}}"
+                            />
                         </div>
                       </div>
                     </div>
@@ -386,6 +386,26 @@
                 </div>
               </div>
               {{/each}}
+              <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all elements with the class 'k'
+  const tdElements = document.querySelectorAll('.k');
+
+  // Iterate through the NodeList and set the content
+  tdElements.forEach((tdElement) => {
+    try {
+      const playlistUrl = tdElement.textContent.trim();
+      const playlistId = (new URL(playlistUrl).searchParams.get('list')) || playlistUrl;
+      tdElement.innerText = playlistId;
+    } catch (error) {
+      console.error(`Error processing URL: ${tdElement.textContent.trim()}`, error.message);
+      // Handle the error gracefully, e.g., set a default value or skip the element
+    }
+  });
+});
+
+              </script>
               
               <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
                 <div class="row">
@@ -764,6 +784,8 @@
     <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
   </div>
+  <script src="sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- / Layout wrapper -->
 
   <!-- Core JS -->
