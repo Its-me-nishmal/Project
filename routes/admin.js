@@ -326,7 +326,7 @@ router.delete('/classes/:name', async (req, res) => {
 
 router.get('/notifications', (req, res) => res.render(path.join(__dirname, '../views/admin/notifications')))
 
-
+router.get('/attendences', (req, res) => res.render(path.join(__dirname, '../views/admin/attendences')))
 router.post('/notify', async (req, res) => {
   const { category, newValue, specialEmail } = req.body;
   console.log(category)

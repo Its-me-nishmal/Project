@@ -4,13 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose')
-var mongodb = require('./.config/dbconnect')
+var mongodb = require('./.config/dbconnect.js')
 const passport = require('./.config/auth.js');
-const { auto_attendance, auto_holi_attendance }= require('./services/auto_attendences')
+const { auto_attendance, auto_holi_attendance }= require('./services/auto_attendences.js')
 const cron = require('node-cron')
-require('./services/mailsender')
-const isholiday = require('./services/holiday');
-const auto_leave = require('./services/auto_leave')
+require('./services/mailsender.js')
+const isholiday = require('./services/holiday.js');
+const auto_leave = require('./services/auto_leave.js')
 const { isSunday } = require('date-fns');
 
 const axios = require('axios');
@@ -48,11 +48,11 @@ mongodb();
 
 
 var indexRouter = require('./routes/index');
-var studentRouter = require('./routes/student');
-const adminRouter = require('./routes/admin');
-const teacherRouter = require('./routes/teacher');
-const parentRouter = require('./routes/parent');
-const Attendences = require('./model/Attendences');
+var studentRouter = require('./routes/student.js');
+const adminRouter = require('./routes/admin.js');
+const teacherRouter = require('./routes/teacher.js');
+const parentRouter = require('./routes/parent.js');
+const Attendences = require('./model/Attendences.js');
 const {Worker, isMainThread} = require('worker_threads')
 
 if (isMainThread) {

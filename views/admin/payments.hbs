@@ -129,54 +129,54 @@
 
                 <ul class="menu-inner py-1">
                     <!-- Dashboard -->
-            <li class="menu-item ">
-              <a href="/admin/" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-              <a href="/admin/teachers" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-graduation"></i>
-                <div data-i18n="Analytics">Teachers</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-              <a href="/admin/students" class="menu-link ">
-                <i class="menu-icon tf-icons bx bxs-user"></i>
-                <div data-i18n="Analytics">Students</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-              <a href="/admin/attendences" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-table"></i>
-                <div data-i18n="Analytics">Attendences</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-              <a href="/admin/classes" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-category"></i>
-                <div data-i18n="Analytics">Classes</div>
-              </a>
-            </li>
-            <li class="menu-item active">
-              <a href="/admin/payments" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-bookmark-minus"></i>
-                <div data-i18n="Analytics">Payments</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-              <a href="/admin/banner" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-map-alt"></i>
-                <div data-i18n="Analytics">Banner</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-            <a href="/admin/solution" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-brain"></i>
-              <div data-i18n="Analytics">Solution AI</div>
-            </a>
-          </li>
+                    <li class="menu-item ">
+                        <a href="/admin/" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a href="/admin/teachers" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-graduation"></i>
+                            <div data-i18n="Analytics">Teachers</div>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a href="/admin/students" class="menu-link ">
+                            <i class="menu-icon tf-icons bx bxs-user"></i>
+                            <div data-i18n="Analytics">Students</div>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a href="/admin/attendences" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-table"></i>
+                            <div data-i18n="Analytics">Attendences</div>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a href="/admin/classes" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-category"></i>
+                            <div data-i18n="Analytics">Classes</div>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/admin/payments" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-bookmark-minus"></i>
+                            <div data-i18n="Analytics">Payments</div>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a href="/admin/banner" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-map-alt"></i>
+                            <div data-i18n="Analytics">Banner</div>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a href="/admin/solution" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-brain"></i>
+                            <div data-i18n="Analytics">Solution AI</div>
+                        </a>
+                    </li>
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Others</span></li>
                     <li class="menu-item">
                         <a href="/support" target="_blank" class="menu-link">
@@ -222,12 +222,7 @@
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- Place this tag where you want the button to render. -->
-                            <li class="nav-item lh-1 me-3">
-                                <a class="github-button"
-                                    href="https://github.com/themeselection/sneat-html-admin-template-free"
-                                    data-icon="octicon-star" data-size="large" data-show-count="true"
-                                    aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
-                            </li>
+
 
                             <!-- User -->
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -297,94 +292,110 @@
                 </nav>
 
                 <!-- / Navbar -->
-
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
-                    <h1>Admin Payments</h1>
+                    <h4 class=" ms-4 mt-4"><span class="text-muted fw-light">Admin
+                            /</span>
+                        Payments</h4>
+                    <div class="card m-4 p-4">
 
-                    <form id="paymentForm">
-                        <!-- Checkbox for selecting all students -->
-                        <div>
-                            <input type="checkbox" id="selectAll" name="selectAll">
-                            <label for="selectAll">Select All Students</label>
-                        </div>
+                        <form id="paymentForm">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div>
+                                            <input type="checkbox" id="selectAll" name="selectAll"
+                                                class="selectAllCheckbox">
+                                            <label for="selectAll">Select All Students</label>
+                                            <br>
+                                        </div>
 
-                        <!-- Checkbox group for selecting individual students -->
-                        <label>Select Students:</label>
-                        {{#each students}}
-                        <div>
-                            <input type="checkbox" id="student{{@index}}" name="selectedStudents[]" value="{{this._id}}"
-                                class="studentCheckbox">
-                            <label for="student{{@index}}">{{this.name}}</label>
-                        </div>
-                        {{/each}}
-                        <br>
+                                        <!-- Checkbox group for selecting individual students -->
+                                        <label>Select Students:</label>
+                                        {{#each students}}
+                                        <div>
+                                            <input type="checkbox" id="student{{@index}}" name="selectedStudents[]"
+                                                value="{{this._id}}" class="studentCheckbox">
+                                            <label for="student{{@index}}">{{this.name}}</label>
+                                        </div>
+                                        {{/each}}
+                                    </div>
 
-                        <!-- Global amount input -->
-                        <div>
-                            <h3>Global Amount (for selected students):</h3>
-                            <label for="globalAmount">Amount:</label>
-                            <input type="number" id="globalAmount" name="globalAmount" required>
-                            <br>
-                            <h3>Reason (for selected students):</h3>
-                            <label for="reason">Reason:</label>
-                            <input type="text" id="reason" name="reason" required>
-                            <br>
-                        </div>
+                                    <div class="col-md-6">
+                                        <!-- Global amount input -->
+                                        <div>
+                                            <label for="globalAmount" class="form-label">Amount:</label>
+                                            <input type="number" id="globalAmount" name="globalAmount"
+                                                class="form-control" required>
+                                            <br>
+                                            <label for="reason" class="form-label">Reason:</label>
+                                            <input type="text" id="reason" name="reason" class="form-control" required>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!-- Submit button -->
-                        <button type="button" onclick="submitForm()">Make Payments</button>
+<div style="display: flex; justify-content: flex-end;">
+    <button type="button" class="bg-success" onclick="submitForm()">Make Payments</button>
+</div>
 
-                        <!-- Button to uncheck all students -->
-                        <button type="button" onclick="uncheckAll()">Uncheck All Students</button>
 
-                        <script>
-                            // JavaScript function to submit the form using Fetch API
-                            async function submitForm() {
-                                const selectAllCheckbox = document.getElementById('selectAll');
-                                const studentCheckboxes = document.querySelectorAll('.studentCheckbox');
-                                const globalAmountInput = document.getElementById('globalAmount');
-                                const reasonInput = document.getElementById('reason');
+                            <script>
+                                // JavaScript function to submit the form using Fetch API
+                                async function submitForm() {
+                                    const selectAllCheckbox = document.getElementById('selectAll');
+                                    const studentCheckboxes = document.querySelectorAll('.studentCheckbox');
+                                    const globalAmountInput = document.getElementById('globalAmount');
+                                    const reasonInput = document.getElementById('reason');
 
-                                const selectedStudentIds = Array.from(studentCheckboxes)
-                                    .filter(checkbox => checkbox.checked)
-                                    .map(checkbox => checkbox.value);
-                                alert(selectedStudentIds)
-                                try {
+                                    const selectedStudentIds = Array.from(studentCheckboxes)
+                                        .filter(checkbox => checkbox.checked)
+                                        .map(checkbox => checkbox.value);
+                                    try {
                                         const response = await fetch('/admin/make-payments', {
                                             method: 'POST',
                                             headers: {
-                                                'Content-Type': 'application/json', // Specify content type as JSON
+                                                'Content-Type': 'application/json',
                                             },
                                             body: JSON.stringify({
                                                 ids: selectedStudentIds,
                                                 amount: globalAmountInput.value,
                                                 reason: reasonInput.value
                                             }),
-                                    });
+                                        });
 
-                                    if (response.ok) {
-                                        console.log('Payments processed successfully');
-                                        // Handle success (e.g., show a success message, redirect, etc.)
-                                    } else {
-                                        console.error('Failed to process payments:', response.statusText);
-                                        // Handle error (e.g., show an error message)
+                                        if (response.ok) {
+                                            console.log('Payments processed successfully');
+                                            alert('Payments successfully Added')
+                                            window.location.reload()
+                                        } else {
+                                            console.error('Failed to process payments:', response.statusText);
+                                            alert("error", response.statusText)
+                                        }
+                                    } catch (error) {
+                                        console.error('Error processing payments:', error.message);
                                     }
-                                } catch (error) {
-                                    console.error('Error processing payments:', error.message);
-                                    // Handle error (e.g., show an error message)
                                 }
-                            }
 
-                            // JavaScript function to uncheck all student checkboxes
-                            function uncheckAll() {
-                                const checkboxes = document.querySelectorAll('.studentCheckbox');
-                                checkboxes.forEach(checkbox => {
-                                    checkbox.checked = false;
+                                function uncheckAll() {
+                                    const checkboxes = document.querySelectorAll('.studentCheckbox');
+                                    checkboxes.forEach(checkbox => {
+                                        checkbox.checked = false;
+                                    });
+                                }
+
+                                // JavaScript function to handle "Select All" functionality
+                                document.getElementById('selectAll').addEventListener('change', function () {
+                                    const isChecked = this.checked;
+                                    document.querySelectorAll('.studentCheckbox').forEach(checkbox => {
+                                        checkbox.checked = isChecked;
+                                    });
                                 });
-                            }
-                        </script>
-                    </form>
+                            </script>
+
+                        </form>
+                    </div>
 
 
 
@@ -454,7 +465,7 @@
     <script src="../assets/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
 </body>
 
 </html>

@@ -305,26 +305,38 @@
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container mt-4">
-                        <h1>Notifications</h1>
-                        <div class="list-group mt-3">
-                            {{#each notifications}}
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1">{{this.content}}</h5>
-                                    <small>{{this.time}}</small>
-                                </div>
-                                <p class="mb-1">Status:
-                                    {{#if this.read}}
-                                    <span style="color: green;">Read</span>
-                                    {{else}}
-                                    <span style="color: red;">Unread</span>
-                                    {{/if}}
-                                </p>
+    <h1>Notifications</h1>
+    <div class="list-group mt-3">
+        {{#each notifications}}
+        <a href="#" class="list-group-item list-group-item-action" data-description="{{this.desc}}">
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-1">{{this.content}}</h5>
+                <small>{{this.time}}</small>
+            </div>
+            <p class="mb-1">Status:
+                {{#if this.read}}
+                <span style="color: green;">Read</span>
+                {{else}}
+                <span style="color: red;">Unread</span>
+                {{/if}}
+            </p>
+        </a>
+        {{/each}}
+    </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+        const notificationItems = document.querySelectorAll('.list-group-item');
 
-                            </a>
-                            {{/each}}
-                        </div>
-                    </div>
+        notificationItems.forEach(item => {
+            item.addEventListener('click', function () {
+                const description = this.getAttribute('data-description');
+                alert(description);
+            });
+        });
+    });
+
+</script>
                     <!-- / Content -->
 
                     <!-- Footer -->

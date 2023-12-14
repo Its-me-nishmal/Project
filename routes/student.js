@@ -85,7 +85,6 @@ router.get('/', auth, async (req, res) => {
   try {
 
     if (req.cookies.student_token && req.student.roll === 'admin') {
-      
 
       res.render(path.join(__dirname, '../views/student/student'), { student: req.student, Leader: 'leader', videos });
     } else if (req.cookies.student_token) {
