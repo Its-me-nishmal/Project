@@ -12,11 +12,16 @@ require('./services/mailsender.js')
 const isholiday = require('./services/holiday.js');
 const auto_leave = require('./services/auto_leave.js')
 const { isSunday } = require('date-fns');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const axios = require('axios');
 
 const apiKey = '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';
 const endpoint = 'https://api.openai.com/v1/chat/completions';
+const store = new MongoDBStore({
+  uri: 'mongodb+srv://alltrackerx:Nichuvdr%40786@cluster0.zqjk0it.mongodb.net/CMS',
+  collection: 'sessions',
+});
 
 const { Configuration, OpenAIApi } = require("openai"); 
 const readlineSync = require("readline-sync"); 
@@ -102,9 +107,10 @@ app.use(require("express-session")({
   secret :'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',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } 
-}))
-
+  cookie: { secure: true },
+  saveUninitialized: true,
+  store: store,
+}));
 
 app.get('/onesignal.js', (req, res) => {
   res.sendFile(__dirname + '/public/onesignal.js');
