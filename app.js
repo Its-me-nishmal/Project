@@ -6,6 +6,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose')
 var mongodb = require('./.config/dbconnect.js')
 const passport = require('./.config/auth.js');
+const session = require('express-session');
 const { auto_attendance, auto_holi_attendance }= require('./services/auto_attendences.js')
 const cron = require('node-cron')
 require('./services/mailsender.js')
