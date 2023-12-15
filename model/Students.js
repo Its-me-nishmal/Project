@@ -12,6 +12,7 @@ const StudentSchema = new mongoose.Schema({
     tokens : String,
     amount : String,
     roll : { type: String, default: "Student"  , required: true },
+    created : { type : Date , default : Date.now() }
   });
  
 const Students = mongoose.model('Students',StudentSchema);
