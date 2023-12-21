@@ -4,7 +4,7 @@ const cls = new mongoose.Schema({
     name : String,
     playlist_url : String,
     cls_teacher : String,
-    playlist: String,
+    playlist: Array,
 })
 
 const clsmodel = mongoose.model('cls',cls)

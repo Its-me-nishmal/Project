@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Modal styles (you can customize this according to your needs) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal HTML structure -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>Enter YouTube Playlist URL:</p>
+            <input type="text" id="playlistInput" placeholder="https://youtube.com/playlist?list=...">
+            <button onclick="updateBanner()">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        function isYouTubePlaylistUrl(url) {
+            try {
+                const parsedUrl = new URL(url);
+                return parsedUrl.hostname === "youtube.com" && parsedUrl.searchParams.has("list");
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function openModal() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+            document.location.href = '/admin'; // Redirect to admin when closing modal
+        }
+
+        function updateBanner() {
+            const playlistInput = document.getElementById('playlistInput');
+            const banner = playlistInput.value;
+
+            // Validate the input
+            if (isYouTubePlaylistUrl(banner)) {
+                const playlistId = new URL(banner).searchParams.get("list");
+
+                let updateUrl = '/admin/banner';
+
+                fetch(updateUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ playlist: playlistId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Updated Successfully");
+                    console.log('Update successful', data);
+                    document.location.href = '/admin';
+                })
+                .catch(error => {
+                    alert("Error updating banner");
+                    console.error('Error updating banner', error);
+                    document.location.href = '/admin';
+                });
+
+                // Close the modal after submitting
+                closeModal();
+            } else {
+                alert("Invalid YouTube Playlist URL");
+            }
+        }
+
+        // Open the modal when the page loads
+        window.onload = openModal;
+    </script>
+</body>
+</html>

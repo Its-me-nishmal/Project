@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
+const Banner = require('../model/Banner')
 
 require('dotenv').config();
 
-const fetchVideos = async () => {
+const fetchVideos = async (id) => {
   const apiKey = process.env.YT; // Replace with your actual YouTube API key
-  const playlistId = 'PLY-ecO2csVHeJuOTlzJyNEC0FctWKx0yS';// Replace with your actual YouTube playlist ID
+  const playlistId = id;// Replace with your actual YouTube playlist ID
 
   try {
     // Fetch video details including videoId
@@ -54,9 +55,18 @@ const fetchVideos = async () => {
 };
 
 router.get('/', async function(req, res, next) {
-  const videos = await fetchVideos();
+  let link = ""
+  try {
+    link = await Banner.find()
+    console.log(link)
+  const videos = await fetchVideos(link[0].playlist);
   console.log(videos.length)
   res.render('index',{videos})
+
+  } catch (e) {
+    console.error(e)
+  }
+  
 });
 
 router.get('/onesignal.js', (req, res) => {

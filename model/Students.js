@@ -11,6 +11,8 @@ const StudentSchema = new mongoose.Schema({
     parent: String,
     tokens : String,
     amount : String,
+    bloodGoup: String,
+    profilePic : { type : String , default: 'https://res.cloudinary.com/dijvr1gyk/image/upload/v1702963433/profile-pictures/ueuzzhankwtat6muzccz.jpg'},
     roll : { type: String, default: "Student"  , required: true },
     created : { type : Date , default : Date.now() }
   });

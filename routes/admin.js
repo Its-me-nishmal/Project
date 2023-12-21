@@ -15,30 +15,73 @@ const Parents = require('../model/Parents')
 const Payments = require('../model/Payments')
 const { verify_teacher, reject_teacher, notifications } = require('../services/mailsender')
 const mongodb = require('../.config/dbconnect')
+const Attendences = require('../model/Attendences');
+const Banner = require('../model/Banner')
 
 
 
 router.get('/', auth, async (req, res) => {
   if (req.cookies.admin_token) {
     try {
-      
-      await mongodb()
-      const AdminModel = require('../model/Admin')
+      await mongodb();
+
+      const AdminModel = require('../model/Admin');
       const Teacher = require('../model/Teachers');
       const Students = require('../model/Students');
-      const Classes = require('../model/classes')
-      const Parents = require('../model/Parents')
+      const Classes = require('../model/classes');
+      const Parents = require('../model/Parents');
+      const Payments = require('../model/Payments');
+
       const admin = await AdminModel.findOne({ tokens: req.cookies.admin_token });
 
       if (admin) {
-
         const teachers = await Teacher.find();
         const classes = await Classes.find();
-        const students = await Students.find()
+        const students = await Students.find();
         const parents = await Parents.find();
 
+        const recentStudents = await Students.aggregate([
+          {
+            $sort: {
+              created: -1,
+            },
+          },
+          {
+            $limit: 5,
+          },
+        ]).exec();
+
+        const recentTeachers = await Teacher.aggregate([
+          {
+            $sort: {
+              created: -1,
+            },
+          },
+          {
+            $limit: 5,
+          },
+        ]).exec();
+
+        const recentPayments = await Payments.aggregate([
+          {
+            $sort: {
+              created: -1,
+            },
+          },
+          {
+            $limit: 5,
+          },
+        ]).exec();
+
         res.render(path.join(__dirname, '../views/admin/index'), {
-          admin: req.admin, teachers, classes, students, parents
+          admin: req.admin,
+          teachers,
+          classes,
+          students,
+          parents,
+          recentStudents,
+          recentTeachers,
+          recentPayments,
         });
       } else {
         res.redirect('/admin/login');
@@ -56,11 +99,29 @@ router.get('/login', (req, res) => res.render(path.join(__dirname, '../views/adm
 router.get('/teachers', async (req, res) => {
   try {
     const teachers = await Teacher.find();
-
+    const teacherDatas = await Teacher.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRejected: { $sum: { $cond: [{ $eq: ["$status", "rejected"] }, 1, 0] } },
+          totalPending: { $sum: { $cond: [{ $eq: ["$status", "pending"] }, 1, 0] } },
+          totalActive: { $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] } },
+          totalCount: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalRejected: 1,
+          totalPending: 1,
+          totalActive: 1,
+          totalCount: 1
+        }
+      }
+    ])
     const datas = await Classes.find();
     const data = datas.map((d) => d.name)
-    console.log(data);
-    res.render(path.join(__dirname, '../views/admin/teachers'), { teachers: teachers, classes: data })
+    res.render(path.join(__dirname, '../views/admin/teachers'), { teachers: teachers, classes: data, td: teacherDatas })
 
   } catch (error) {
     console.error(error);
@@ -71,9 +132,29 @@ router.get('/teachers', async (req, res) => {
 router.get('/students', async (req, res) => {
   try {
     const Student = await Students.find();
+    const studentDate = await Students.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRejected: { $sum: { $cond: [{ $eq: ["$status", "rejected"] }, 1, 0] } },
+          totalPending: { $sum: { $cond: [{ $eq: ["$status", "pending"] }, 1, 0] } },
+          totalActive: { $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] } },
+          totalCount: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalRejected: 1,
+          totalPending: 1,
+          totalActive: 1,
+          totalCount: 1
+        }
+      }
+    ])
 
     // Render the 'teachers' view and pass the 'teachers' data to it
-    res.render(path.join(__dirname, '../views/admin/students'), { students: Student });
+    res.render(path.join(__dirname, '../views/admin/students'), { students: Student, td: studentDate });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal server error');
@@ -110,7 +191,15 @@ router.post('/change_status', async (req, res) => {
 
 router.get('/classes', async (req, res) => {
   const data = await Classes.find()
-  res.render(path.join(__dirname, '../views/admin/classes'), { classes: data })
+  const courses = await Classes.aggregate([
+    {
+      $group: {
+        _id: null,
+        total_count: { $sum: { $cond: { if: { $isArray: "$playlist" }, then: { $size: "$playlist" }, else: 0 } } }
+      }
+    }
+  ])
+  res.render(path.join(__dirname, '../views/admin/classes'), { classes: data, courses })
 })
 
 // router.get('/register',async(req,res)=>{
@@ -245,10 +334,26 @@ router.post('/classes', async (req, res) => {
 
 router.post('/courses', async (req, res) => {
   try {
-    const { id , playlist } = req.body;
-    const cls = await Classes.findById(id)
-    cls.playlist = playlist
-    const data = await cls.save()
+    const { id, playlist } = req.body;
+
+    // Validate request body
+    if (!id || !playlist) {
+      return res.status(400).json({ error: 'Bad Request. Missing required fields.' });
+    }
+
+    const cls = await Classes.findById(id);
+
+    if (!cls) {
+      return res.status(404).json({ error: 'Class not found.' });
+    }
+
+    // Update playlist
+    cls.playlist = playlist;
+
+    // Save changes
+    const data = await cls.save();
+
+    // Send updated data in the response
     res.status(200).json(data);
   } catch (error) {
     console.error(error);
@@ -271,7 +376,7 @@ router.post('/make-payments', async (req, res) => {
     const selectedStudentIdsString = req.body.ids;
     const globalAmount = req.body.amount;
     const reason = req.body.reason;
-  
+
     console.log('Selected Student IDs:', selectedStudentIdsString);
     console.log('Global Amount:', globalAmount);
     // Ensure that at least one student is selected
@@ -324,9 +429,76 @@ router.delete('/classes/:name', async (req, res) => {
   }
 });
 
-router.get('/notifications', (req, res) => res.render(path.join(__dirname, '../views/admin/notifications')))
+router.get('/attendences', async (req, res) => {
+  let day = new Date();
+  let dateString = day.toISOString().split("T")[0];
 
-router.get('/attendences', (req, res) => res.render(path.join(__dirname, '../views/admin/attendences')))
+  const attendance = await Attendences.aggregate([
+    {
+      $match: {
+        date: new Date(dateString)
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        presentStudents: {
+          $map: {
+            input: {
+              $filter: {
+                input: "$students",
+                cond: {
+                  $and: [
+                    { $eq: ["$$this.isPresent", true] },
+                    { $ne: ["$$this.name", null] }
+                  ]
+                }
+              }
+            },
+            as: "student",
+            in: "$$student.std_id"
+          }
+        },
+        absentStudents: {
+          $map: {
+            input: {
+              $filter: {
+                input: "$students",
+                cond: {
+                  $and: [
+                    { $eq: ["$$this.isPresent", false] },
+                    { $ne: ["$$this.name", null] }
+                  ]
+                }
+              }
+            },
+            as: "student",
+            in: "$$student.std_id"
+          }
+        }
+      }
+    }
+  ]);
+
+  console.log(attendance);
+
+  const presentStudentIds = attendance[0].presentStudents;
+  const absentStudentIds = attendance[0].absentStudents;
+  console.log(presentStudentIds)
+  const presentStudents = await Students.find({ _id: { $in: presentStudentIds } });
+
+  // Finding absent students
+  const absentStudents = await Students.find({ _id: { $in: absentStudentIds } });
+console.log(presentStudents)
+  res.render(path.join(__dirname, '../views/admin/attendences'), {
+    atd: attendance,
+    presentStudents,
+    absentStudents,
+  });
+});
+
+
+
 router.post('/notify', async (req, res) => {
   const { category, newValue, specialEmail } = req.body;
   console.log(category)
@@ -358,11 +530,26 @@ router.post('/notify', async (req, res) => {
   res.json({ message: 'Emails sent successfully' });
 });
 
-router.get('/solution',(req,res)=>{
-  res.render(path.join(__dirname,'../views/admin/solution'))
-  })
+router.get('/solution', (req, res) => {
+  res.render(path.join(__dirname, '../views/admin/solution'))
+})
 
 
+router.get('/banner',(req,res)=>{
+  res.render(path.join(__dirname, '../views/admin/banner'))
+})
+
+router.put("/banner", async (req, res) => {
+  try {
+    // Use await directly on the updateOne method
+    await Banner.updateOne({}, { $set: { playlist: req.body.playlist } });
+    res.json({ message: 'Banner updated successfully' });
+  } catch (err) {
+    // Handle the error appropriately (e.g., send an error response)
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 module.exports = router;

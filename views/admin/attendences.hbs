@@ -120,7 +120,7 @@
           <!-- Misc -->
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Others</span></li>
           <li class="menu-item">
-            <a href="/support" target="_blank" class="menu-link">
+            <a href="/support" target="_blank" class="menu-link" >
               <i class="menu-icon tf-icons bx bx-support"></i>
               <div data-i18n="Support">Support</div>
             </a>
@@ -229,80 +229,215 @@
         <!-- / Navbar -->
 
         <!-- Content wrapper -->
-        <div class="content-wrapper">
-          <!-- Content -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
 
-          <div class="container-xxl flex-grow-1 container-p-y">
+    .content-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
+    .container {
+      max-width: 1140px;
+      width: 100%;
+      padding: 0 15px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
-            <div class="row col-lg-6">
-              <!-- Order Statistics -->
-              <div id="myChart" style="width:100%; max-width:600px; height:500px;">
+    .container-p-y {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    #myChart {
+      width: 100%;
+      max-width: 600px;
+      height: 500px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      flex-basis: 48%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      color: #3498db;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .lii {
+      margin: 8px 0;
+      padding: 8px;
+      background-color: #ecf0f1;
+      border-radius: 4px;
+    }
+    strong {
+      justify-items: end;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        flex-basis: 100%;
+      }
+    }
+  </style>
+        <div class="content-wrapper ">
+  <!-- Content -->
+  <div class="">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <p style="display: none;" id="present">{{atd.[0].presentStudents.length}}</p>
+      <p style="display: none;" id="absent">{{atd.[0].absentStudents.length}}</p>
+
+      
+      <script>
+        let present = Number(document.getElementById("present").textContent);
+        let absent = Number(document.getElementById("absent").textContent);
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+          const data = google.visualization.arrayToDataTable([
+            ['Category', 'Count'],
+            ['Present Students', present],
+            ['Absent Students', absent],
+          ]);
+
+          const options = {
+            title: 'Attendance Statistics',
+            is3D: true,
+            colors: ['#65B741', '#e74c3c'],
+          };
+
+          const chart = new google.visualization.PieChart(document.getElementById('myChart'));
+          chart.draw(data, options);
+        }
+      </script>
+
+     
+<div class="row">
+              <!-- Transactions -->
+              <div class="col-md-6 col-lg-4 order-2 mb-4">
+                <div class="card h-100">
+                  <div id="myChart" style="padding-top: 100px;"></div>
+                  <small class="text-center">Total Present Students : {{atd.[0].presentStudents.length}}</small>
+                  <small class="text-center">Total Absent Students : {{atd.[0].absentStudents.length}}</small>
+                </div>
+                
               </div>
-              <script>
-                google.charts.load('current', { 'packages': ['corechart'] });
-                google.charts.setOnLoadCallback(drawChart);
-
-                function drawChart() {
-                  const data = google.visualization.arrayToDataTable([
-                    ['Contry', 'Mhl'],
-                    ['Italy', 54.8],
-                    ['France', 48.6],
-                    ['Spain', 44.4],
-                    ['USA', 23.9],
-                    ['Argentina', 14.5]
-                  ]);
-
-                  const options = {
-                    title: 'Today Attendences',
-                    is3D: true
-                  };
-
-                  const chart = new google.visualization.PieChart(document.getElementById('myChart'));
-                  chart.draw(data, options);
-                }
-              </script>
-              <!--/ Order Statistics -->
-
               <!--/ Transactions -->
+
+              <!-- Transactions -->
+              <div class="col-md-6 col-lg-4 order-2 mb-4">
+                <div class="card h-100">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">Absent Students</h5>
+                    <div class="dropdown">
+                      <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
+                        <a class="dropdown-item" href="javascript:void(0);">Show All</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <ul class="p-0 m-0">
+                      {{#each absentStudents}}
+                      <li class="d-flex mb-4 pb-1">
+                        <div class="avatar flex-shrink-0 me-3">
+                          <img src="{{this.profilePic}}" alt="User" class="rounded" />
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                          <div class="me-2">
+                            <h6 class="mb-0">{{this.name}}</h6>
+                          </div>
+                          <div class="user-progress d-flex align-items-center gap-1">
+                            <span class="text-muted">{{this.class}}</span>
+                          </div>
+                        </div>
+                      </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!--/ Transactions -->
+
+              <!-- Transactions -->
+              <div class="col-md-6 col-lg-4 order-2 mb-4">
+                <div class="card h-100">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">Present Students</h5>
+                    <div class="dropdown">
+                      <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
+                        <a class="dropdown-item" href="javascript:void(0);">Show All</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <ul class="p-0 m-0">
+                      {{#each presentStudents}}
+                      <li class="d-flex mb-4 pb-1">
+                        <div class="avatar flex-shrink-0 me-3">
+                          <img src="{{this.profilePic}}" alt="User" class="rounded" />
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                          <div class="me-2">
+                            <h6 class="mb-0">{{this.name}}</h6>
+                          </div>
+                          <div class="user-progress d-flex align-items-center gap-1">
+                            <span class="text-muted">{{this.class}}</span>
+                          </div>
+                        </div>
+                      </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+        <!-- / Content -->
+
+        <!-- Footer -->
+        <footer class="content-footer footer bg-footer-theme">
+          <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+            <div class="mb-2 mb-md-0">
+              
+              <script>
+              </script><a href="https://themeselection.com" target="_blank" class="footer-link fw-medium">Attendance Statistics</a>
+            </div>
+            <div class="d-none d-lg-inline-block">
             </div>
           </div>
-          <!-- / Content -->
+        </footer>
+        <!-- / Footer -->
 
-          <!-- Footer -->
-          <footer class="content-footer footer bg-footer-theme">
-            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-              <div class="mb-2 mb-md-0">
-                ©
-                <script>
-                  document.write(new Date().getFullYear());
-                </script>
-                , made with ❤️ by
-                <a href="https://themeselection.com" target="_blank" class="footer-link fw-medium">ThemeSelection</a>
-              </div>
-              <div class="d-none d-lg-inline-block">
-                <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
-                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
-
-                <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
-                  target="_blank" class="footer-link me-4">Documentation</a>
-
-                <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues" target="_blank"
-                  class="footer-link me-4">Support</a>
-              </div>
-            </div>
-          </footer>
-          <!-- / Footer -->
-
-          <div class="content-backdrop fade"></div>
-        </div>
-        <!-- Content wrapper -->
+        <div class="content-backdrop fade"></div>
       </div>
-      <!-- / Layout page -->
+      <!-- Content wrapper -->
     </div>
+    <!-- / Layout page -->
+  </div>
 
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
+  <!-- Overlay -->
+  <div class="layout-overlay layout-menu-toggle"></div>
   </div>
   <!-- / Layout wrapper -->
 

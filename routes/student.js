@@ -16,6 +16,24 @@ const clearRequire = require('clear-require');
 const Razorpay = require('razorpay');
 const PaymentModel = require('../model/Payments');
 const ObjectId = mongoose.Types.ObjectId;
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+  cloud_name: 'dijvr1gyk',
+  api_key: '827348513767443',
+  api_secret: 'iUA9Awo6pH7bKV5j10o05d6Kd9o',
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'profile-pictures',
+    allowed_formats: ['jpg', 'jpeg', 'png'],
+    transformation: [{ width: 150, height: 150, crop: 'limit' }],
+  },
+});
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -81,7 +99,7 @@ const ObjectId = mongoose.Types.ObjectId;
 router.get('/', auth, async (req, res) => {
   const stdcls = await Classes.findOne({name:req.student.class});
   console.log(stdcls.playlist);
-      const videos = await fetchVideos(stdcls.playlist);
+      const videos = await fetchVideos(stdcls.playlist[0]);
   try {
 
     if (req.cookies.student_token && req.student.roll === 'admin') {
@@ -352,6 +370,8 @@ router.post('/login', async (req, res) => {
 
 router.get('/profile',auth, (req,res) => res.render(path.join(__dirname,'../views/student/profile')))
 
+
+
 router.post('/payment',(req,res)=>{res.send('going to payment')})
 
 router.get('/auth/google',
@@ -392,6 +412,36 @@ router.post("/profile/update/parent",auth,async(req,res)=>{
   } catch(e){console.log(e);}
 })
 
+const upload = multer({ storage });
+router.post('/profile',auth, upload.single('profilePicture'), async (req, res) => {
+  try {
+    const { basic_icon_default_phone , basic_icon_default_blood_group, basic_icon_default_name } = req.body;
+
+    const existingUser = await Students.findById(req.student._id);
+    console.log(existingUser)
+    if (!existingUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update user details
+    existingUser.name = basic_icon_default_name;
+    existingUser.bloodGoup = basic_icon_default_blood_group;
+    existingUser.phone = basic_icon_default_phone;
+
+    // If a new profile picture is uploaded, update the profilePicture field
+    if (req.file) {
+      existingUser.profilePic = req.file.path;
+    }
+
+    // Save the changes
+    await existingUser.save();
+
+    res.json({ message: 'Profile updated successfully.', user: existingUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 router.get('/notifications',(req,res)=>{
   const notifications = [
     {

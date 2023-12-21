@@ -59,12 +59,12 @@ const adminRouter = require('./routes/admin.js');
 const teacherRouter = require('./routes/teacher.js');
 const parentRouter = require('./routes/parent.js');
 const Attendences = require('./model/Attendences.js');
-// const {Worker, isMainThread} = require('worker_threads')
+const {Worker, isMainThread} = require('worker_threads')
 
 // if (isMainThread) {
 //   const worker = new Worker('./workers.js');
 
-//   cron.schedule('10 15 * * *', async () => {
+//   cron.schedule('04 9 * * *', async () => {
 //     const check = isholiday(new Date());
   
 //   if (check === false) {
