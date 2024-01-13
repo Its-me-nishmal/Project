@@ -353,7 +353,7 @@
                                         .filter(checkbox => checkbox.checked)
                                         .map(checkbox => checkbox.value);
                                     try {
-                                        const response = await fetch('/admin/make-payments', {
+                                        const response = await fetch('/make-payments', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json',

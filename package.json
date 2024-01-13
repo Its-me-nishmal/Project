@@ -41,7 +41,8 @@
     "passport-google-oauth20": "^2.0.0",
     "razorpay": "^2.9.2",
     "readline-sync": "^1.4.10",
-    "sweetalert2": "^11.9.0"
+    "sweetalert2": "^11.9.0",
+    "vhost": "^3.0.2"
   },
   "bin": {
     "www": "./bin/www.js"

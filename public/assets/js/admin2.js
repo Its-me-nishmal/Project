@@ -55,7 +55,7 @@ async function adminchange(email, password) {
 
   if (validationResult === 'Valid') {
     try {
-      const response = await fetch('admin/new_pass', {
+      const response = await fetch('/new_pass', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

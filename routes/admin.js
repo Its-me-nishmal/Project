@@ -20,7 +20,7 @@ const Banner = require('../model/Banner')
 
 
 
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   if (req.cookies.admin_token) {
     try {
       await mongodb();
@@ -65,7 +65,7 @@ router.get('/', auth, async (req, res) => {
         const recentPayments = await Payments.aggregate([
           {
             $sort: {
-              created: -1,
+              date: -1,
             },
           },
           {
@@ -73,15 +73,37 @@ router.get('/', auth, async (req, res) => {
           },
         ]).exec();
 
+        // Extract student ids from recentPayments
+        const studentIds = recentPayments.map(payment => payment.student);
+        console.log("Student IDs:", studentIds);
+
+        // Find corresponding student details
+        const studentsDetails = await Students.find({ _id: { $in: studentIds } });
+        console.log("Students Details:", studentsDetails);
+        // Combine payment and student details
+        const combinedData = recentPayments.map(payment => {
+          const studentDetail = studentsDetails.find(student => student._id.equals(payment.student));
+          return {
+            amount: payment.amount,
+            date: payment.date,
+            isPaid: payment.isPaid,
+            reason: payment.reason,
+            paymentId: payment.paymentId,
+            studentName: studentDetail ? studentDetail.name : '',
+            profilePic: studentDetail ? studentDetail.profilePic : '',
+          };
+        });
+        console.log(combinedData)
+
         res.render(path.join(__dirname, '../views/admin/index'), {
-          admin: req.admin,
+          admin: admin,
           teachers,
           classes,
           students,
           parents,
           recentStudents,
           recentTeachers,
-          recentPayments,
+          recentPayments: combinedData
         });
       } else {
         res.redirect('/admin/login');
@@ -91,7 +113,7 @@ router.get('/', auth, async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   } else {
-    res.redirect('/admin/login');
+    res.redirect('/login');
   }
 });
 
@@ -202,22 +224,23 @@ router.get('/classes', async (req, res) => {
   res.render(path.join(__dirname, '../views/admin/classes'), { classes: data, courses })
 })
 
-// router.get('/register',async(req,res)=>{
-//     email = process.env.DEFAULT_ADMIN
-//     password = process.env.ADMIN_PASSWORD
-//     hashpass = await bcrypt.hash(password,10)
-//     const admin = new AdminModel({
-//         email : email,
-//         password : hashpass
-//     })
-//     let ok = await admin.save()
-//     console.log(ok);
-//     res.send('success')
-// })
+router.get('/register', async (req, res) => {
+  email = process.env.DEFAULT_ADMIN
+  password = process.env.ADMIN_PASSWORD
+  hashpass = await bcrypt.hash(password, 10)
+  const admin = new AdminModel({
+    email: email,
+    password: hashpass
+  })
+  let ok = await admin.save()
+  console.log(ok);
+  res.send('success')
+})
 
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log(email)
 
   try {
     const Admin = await AdminModel.findOne({ email })
@@ -228,7 +251,7 @@ router.post('/login', async (req, res) => {
     Admin.tokens = admin_token
     await Admin.save()
     res.cookie('admin_token', admin_token, { httpOnly: true })
-    res.redirect('/admin')
+    res.redirect('/')
   } catch (err) {
     console.log(err);
   }
@@ -489,7 +512,7 @@ router.get('/attendences', async (req, res) => {
 
   // Finding absent students
   const absentStudents = await Students.find({ _id: { $in: absentStudentIds } });
-console.log(presentStudents)
+  console.log(presentStudents)
   res.render(path.join(__dirname, '../views/admin/attendences'), {
     atd: attendance,
     presentStudents,
@@ -535,7 +558,7 @@ router.get('/solution', (req, res) => {
 })
 
 
-router.get('/banner',(req,res)=>{
+router.get('/banner', (req, res) => {
   res.render(path.join(__dirname, '../views/admin/banner'))
 })
 
@@ -550,6 +573,13 @@ router.put("/banner", async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.get('/support', async (req,res) =>{
+  res.render('support')
+})
+router.get('/about-us', async (req,res) =>{
+  res.render('about')
+})
 
 
 module.exports = router;

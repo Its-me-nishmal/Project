@@ -1,7 +1,7 @@
 function deleteClass(name) {
     const confirmDelete = confirm(`Are you sure you want to delete the class "${name}"?`);
     if (confirmDelete) {
-        fetch(`/admin/classes/${name}`, {
+        fetch(`/classes/${name}`, {
             method: 'DELETE'
         })
             .then(response => {
@@ -22,7 +22,7 @@ function addClassPrompt() {
     if (classNames) {
         const classArray = classNames.split(',').map(name => name.trim());
         classArray.forEach(className => {
-            fetch('/admin/classes', {
+            fetch('/classes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: className })
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const playlistIds = playlists.map(playlist => (new URL(playlist).searchParams.get('list')) || playlist);
 
-        const response = await fetch('/admin/courses', {
+        const response = await fetch('/courses', {
           method: "POST",
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ playlist: playlistIds, id: idd })

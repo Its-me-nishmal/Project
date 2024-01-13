@@ -104,9 +104,9 @@ router.get('/', auth, async (req, res) => {
 
     if (req.cookies.student_token && req.student.roll === 'admin') {
 
-      res.render(path.join(__dirname, '../views/student/student'), { student: req.student, Leader: 'leader', videos });
+      res.render(path.join(__dirname, '../views/student/student'), { student: req.student, Leader: 'leader',  videos});
     } else if (req.cookies.student_token) {
-      res.render(path.join(__dirname, '../views/student/student'), { student: req.student, videos });
+      res.render(path.join(__dirname, '../views/student/student'), { student: req.student,  videos});
     } else {
       res.redirect('/student/login');
     }
@@ -239,14 +239,16 @@ router.get('/attendences', auth, async (req, res) => {
 router.get('/payments', auth, async (req, res) => {
   try {
     if (req.cookies.student_token && req.student.roll !== 'admin') {
-      res.render(path.join(__dirname, '../views/student/payments'), { student: req.student, Leader: 'leader' });
+      const studentId = req.student._id;
+      const payments = await PaymentModel.find({ student: studentId });
+      res.render(path.join(__dirname, '../views/student/payments'), { student: req.student,payments: payments  });
     } else if (req.cookies.student_token) {
       const studentId = req.student._id;
 
       console.log(studentId)
       const payments = await PaymentModel.find({ student: studentId });
 
-      res.render(path.join(__dirname, '../views/student/payments'), { student: req.student, payments: payments });
+      res.render(path.join(__dirname, '../views/student/payments'), { student: req.student, payments: payments, Leader: 'leader' });
     } else {
       res.redirect('/student/login');
     }
@@ -446,6 +448,7 @@ router.get('/notifications',(req,res)=>{
   const notifications = [
     {
         content: "New notification 1",
+        desc: "hello sjhfksjhfkshk fjhjk hksdhf kh khkfhkfhkfhkfhdkfhksfhkfhkshfksdhfkshfskldfhklsaghflkasgflkashgfklasgfklasgdfklasdghf  hk h  khk sdk gk k  k kh k kl kg kg kdg k kg kd kd k kjg klg kjg kg k k k k kjgfkjsdfffff kk gjjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkjgkgkkjgkjgfsldf",
         time: "2023-11-07 10:00 AM",
         read: false,
     },

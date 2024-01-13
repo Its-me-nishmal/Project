@@ -9,7 +9,8 @@ const TeacherSchema = new mongoose.Schema({
     class: String,
     mobile: Number,
     parent: String,
-    tokens : String  
+    tokens : String,
+    profilePic: String  
   });
  
 const Teachers = mongoose.model('Teachers',TeacherSchema);

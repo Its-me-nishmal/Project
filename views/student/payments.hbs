@@ -556,7 +556,7 @@
 <script>
     async function payNow(orderId, amount) {
         try {
-            const response = await fetch('/student/create-razorpay-order', {
+            const response = await fetch('/create-razorpay-order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -577,7 +577,7 @@
                 handler: async function (response) {
                     if (response.razorpay_payment_id) {
                         try {
-                            const updateResponse = await fetch('/student/pay', {
+                            const updateResponse = await fetch('/pay', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',

@@ -61,30 +61,30 @@ const parentRouter = require('./routes/parent.js');
 const Attendences = require('./model/Attendences.js');
 const {Worker, isMainThread} = require('worker_threads')
 
-// if (isMainThread) {
-//   const worker = new Worker('./workers.js');
+if (isMainThread) {
+  const worker = new Worker('./workers.js');
 
-//   cron.schedule('04 9 * * *', async () => {
-//     const check = isholiday(new Date());
+  cron.schedule('26 14 * * *', async () => {
+    const check = isholiday(new Date());
   
-//   if (check === false) {
-//     if (!isSunday(new Date())) {
-//       worker.postMessage({ type: 'auto_attendance' });
-//       console.log('auto_attendance successfully');
-//       await auto_attendance();
-//     } else {
-//       console.log('Today is Sunday, no attendance required.');
-//     }
-//   } else {
-//     worker.postMessage({ type: 'auto_holi_attendance' });
-//     console.log('auto_holi_attendance successfully');
-//     await auto_holi_attendance()
-//   }
-//   });
+  if (check === false) {
+    if (!isSunday(new Date())) {
+      worker.postMessage({ type: 'auto_attendance' });
+      console.log('auto_attendance successfully');
+      await auto_attendance();
+    } else {
+      console.log('Today is Sunday, no attendance required.');
+    }
+  } else {
+    worker.postMessage({ type: 'auto_holi_attendance' });
+    console.log('auto_holi_attendance successfully');
+    await auto_holi_attendance()
+  }
+  });
 
-// }
+}
 
-  cron.schedule('59 9 * * *',async () => {
+  cron.schedule('59 14 * * *',async () => {
     const check = isholiday(new Date());
 
     if (check === false) {
@@ -138,13 +138,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('subdomain offset', 1);
 
-
-app.use('/', indexRouter);
-app.use('/student', studentRouter);
-app.use('/admin', adminRouter)
-app.use('/teacher', teacherRouter);
-app.use('/parent', parentRouter);
+app.use((req, res, next) => {
+  const subdomain = req.subdomains[0]
+  if (subdomain === 'admin') {
+    adminRouter(req, res, next); 
+  } else if (subdomain === 'teacher') {
+    teacherRouter(req, res, next); 
+  } else if (subdomain === 'student') {
+    studentRouter(req, res, next); 
+  } else {
+    indexRouter(req, res, next); 
+  }
+});
 
 
 app.use(function(req, res, next) {
