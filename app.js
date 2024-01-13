@@ -141,7 +141,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('subdomain offset', 1);
 
 app.use((req, res, next) => {
-  const subdomain = req.subdomains[0]
+  const subdomain = req.subdomains[0];
+  console.log("sub",subdomain)
   if (subdomain === 'admin') {
     adminRouter(req, res, next); 
   } else if (subdomain === 'teacher') {
