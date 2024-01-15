@@ -149,6 +149,8 @@ app.use((req, res, next) => {
     teacherRouter(req, res, next); 
   } else if (subdomain === 'student') {
     studentRouter(req, res, next); 
+  } else if (subdomain === 'parent') {
+    parentRouter(req, res, next); 
   } else {
     indexRouter(req, res, next); 
   }

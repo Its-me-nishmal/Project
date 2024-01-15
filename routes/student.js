@@ -93,7 +93,18 @@ const storage = new CloudinaryStorage({
     }
   };
   
-
+  router.get('/videos/:index',auth, async (req, res) => {
+    try {
+      const index = req.params.index;
+      const stdcls = await Classes.findOne({ name: req.student.class });
+      const videos = await fetchVideos(stdcls.playlist[index]);
+      console.log(videos);
+      res.json(videos);
+    } catch (error) {
+      console.error('Error fetching videos:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 
 router.get('/', auth, async (req, res) => {
@@ -104,9 +115,9 @@ router.get('/', auth, async (req, res) => {
 
     if (req.cookies.student_token && req.student.roll === 'admin') {
 
-      res.render(path.join(__dirname, '../views/student/student'), { student: req.student, Leader: 'leader',  videos});
+      res.render(path.join(__dirname, '../views/student/student'), { student: req.student, Leader: 'leader',  videos,play:stdcls.playlist});
     } else if (req.cookies.student_token) {
-      res.render(path.join(__dirname, '../views/student/student'), { student: req.student,  videos});
+      res.render(path.join(__dirname, '../views/student/student'), { student: req.student,  videos, play:stdcls.playlist});
     } else {
       res.redirect('/student/login');
     }
@@ -333,7 +344,7 @@ router.post('/register', async (req, res) => {
     amount : '0'
   });
   await user.save()
-  res.redirect('/student/login')
+  res.redirect('/login')
   
 })
 
@@ -363,7 +374,7 @@ router.post('/login', async (req, res) => {
       check.tokens = student_token
       await check.save() 
       res.cookie('student_token', student_token, { httpOnly: true });
-      return res.redirect('/student');
+      return res.redirect('/');
     }
   } catch (e) {
     console.error(e);

@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
           alert('Fields cannot be empty');
         } else {
           try {
-            const response = await fetch('/teacher/change_status', {
+            const response = await fetch('/change_status', {
               method: "POST",
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ nmae: nmaeValue, tclass: tclassValue, tstatus: tstatusValue })

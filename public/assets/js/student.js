@@ -3,50 +3,50 @@ function did(...ids) {return ids.map(id => document.getElementById(id));}
 
 
 const [treg,submit] = did('treg','submit'); // treg is teacher registration , submit for teacher login
-const ok = submit.textContent == "Sign in"
-console.log(ok);
-if (ok) {
-    function temp1 () {
-        submit.addEventListener('click', (e) => {
-            const [email,password,changelog] = did('email', 'password','changelog')
-            if (!email.value || !password.value) {
-                changelog.textContent = 'Please fill all fields below'
-                changelog.style.color = 'orange';
-                e.preventDefault()
-            } else {
-                fetch('/student/login',{
-                    method:'POST',
-                    headers: {'Content-Type': 'application/json',
-                    body: JSON.stringify({
-                        email:email.value,
-                        password:password.value
-                    })}
-                })
-            }
-        })
-    } temp1()
-} else {
-    function temp2() {
-        alert('payment')
-        submit.addEventListener('click', (e) => {
-            const [email,password,changelog] = did('email', 'password','changelog')
-            if (!email.value || !password.value) {
-                changelog.textContent = 'Please fill all fields below'
-                changelog.style.color = 'orange';
-                e.preventDefault()
-            } else {
-                fetch('/student/payment',{
-                    method:'POST',
-                    headers: {'Content-Type': 'application/json',
-                    body: JSON.stringify({
-                        email:email.value,
-                        password:password.value
-                    })}
-                })
-            }
-        })
-    }   temp2()
-}
+// const ok = submit.textContent === "Sign in"
+// console.log(ok);
+// if (ok) {
+//     function temp1 () {
+//         submit.addEventListener('click', (e) => {
+//             const [email,password,changelog] = did('email', 'password','changelog')
+//             if (!email.value || !password.value) {
+//                 changelog.textContent = 'Please fill all fields below'
+//                 changelog.style.color = 'orange';
+//                 e.preventDefault()
+//             } else {
+//                 fetch('/student/login',{
+//                     method:'POST',
+//                     headers: {'Content-Type': 'application/json',
+//                     body: JSON.stringify({
+//                         email:email.value,
+//                         password:password.value
+//                     })}
+//                 })
+//             }
+//         })
+//     } temp1()
+// } else {
+//     function temp2() {
+//         alert('payment')
+//         submit.addEventListener('click', (e) => {
+//             const [email,password,changelog] = did('email', 'password','changelog')
+//             if (!email.value || !password.value) {
+//                 changelog.textContent = 'Please fill all fields below'
+//                 changelog.style.color = 'orange';
+//                 e.preventDefault()
+//             } else {
+//                 fetch('/student/payment',{
+//                     method:'POST',
+//                     headers: {'Content-Type': 'application/json',
+//                     body: JSON.stringify({
+//                         email:email.value,
+//                         password:password.value
+//                     })}
+//                 })
+//             }
+//         })
+//     }   temp2()
+// }
 
 
 
@@ -55,7 +55,7 @@ if (treg) {
         const [name , email, password, repassword, terms , chngein , std] = did('anme', 'email', 'password', 'repassword','terms-conditions', 'chngein' ,'selectNumber');
         const valid = validateInput(name.value, email.value, password.value, repassword.value, terms , std.value);
         if (valid === true) {
-            fetch('/student/register',
+            fetch('/register',
             method  = 'POST',
             headers = {'Content-Type': 'application/json'}
             )

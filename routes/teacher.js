@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
       check.tokens = teacher_token
       await check.save()
       res.cookie('teacher_token', teacher_token, { httpOnly: true });
-      return res.redirect('/teacher');
+      return res.redirect('/');
     }
   } catch (e) {
     console.error(e);
