@@ -356,8 +356,10 @@ router.get('/register', async (req, res) => {
 router.get('/login', (req, res) =>{ 
   if(req.cookies.student_token){
     res.redirect("/");
+  } else {
+    res.render(path.join(__dirname, '../views/student/login.hbs'))
   }
-  res.render(path.join(__dirname, '../views/student/login.hbs'))
+  
 });
 
 router.post('/register', async (req, res) => {
