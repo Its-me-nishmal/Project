@@ -353,7 +353,12 @@ router.get('/register', async (req, res) => {
   }
 });
 
-router.get('/login', (req, res) => res.render(path.join(__dirname, '../views/student/login.hbs')));
+router.get('/login', (req, res) =>{ 
+  if(req.cookies.student_token){
+    res.redirect("/");
+  }
+  res.render(path.join(__dirname, '../views/student/login.hbs'))
+});
 
 router.post('/register', async (req, res) => {
   const { anme , email, password , selectNumber } = req.body
