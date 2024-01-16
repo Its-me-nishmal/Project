@@ -177,12 +177,38 @@
             <!-- Search -->
             <div class="navbar-nav align-items-center">
               <div class="nav-item d-flex align-items-center">
-                <i class="bx bx-search fs-4 lh-0"></i>
-                <input id="searchInput" type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="Search..."
+                <i class="bx bx-search fs-4 lh-0" ></i>
+                <input type="hidden" id="hid_search">
+                <input id="searchInput" type="text" oninput="doSearch(document.getElementById('searchInput').value)" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="Search..."
                   aria-label="Search..." />
               </div>
             </div>
             <!-- /Search -->
+            <script>
+ function doSearch(text,color="yellow") {
+    if (color!="transparent") {
+      doSearch(document.getElementById('hid_search').value,"transparent"); 
+      document.getElementById('hid_search').value = text; 
+      }
+    if (window.find && window.getSelection) {
+        document.designMode = "on";
+        var sel = window.getSelection();
+        sel.collapse(document.body, 0);
+        
+        while (window.find(text)) {
+            document.execCommand("HiliteColor", false, color);
+            sel.collapseToEnd();
+        }
+        document.designMode = "off";
+    } else if (document.body.createTextRange) {
+        var textRange = document.body.createTextRange();
+        while (textRange.findText(text)) {
+            textRange.execCommand("BackColor", false, "red");
+            textRange.collapse(false);
+        }
+    }
+}
+</script>
 
             <ul class="navbar-nav flex-row align-items-center ms-auto">
 
@@ -248,6 +274,9 @@
             </ul>
           </div>
         </nav>
+        <script>
+document.getElementById("searchInput").addEventListener("input",window.find("no"))
+</script>
                 <!-- / Navbar -->
 
                 <!-- Content wrapper -->

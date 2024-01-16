@@ -1,6 +1,14 @@
-var express = require('express');
-var router = express.Router();
 const Banner = require('../model/Banner')
+const express = require('express')
+const router = express.Router()
+const mongoose = require('mongoose')
+const AdminModel = require('../model/Admin')
+const Teacher = require('../model/Teachers');
+const Students = require('../model/Students');
+const Classes = require('../model/classes')
+const Parents = require('../model/Parents')
+const Payments = require('../model/Payments')
+const Attendences = require('../model/Attendences');
 
 require('dotenv').config();
 
@@ -57,11 +65,12 @@ const fetchVideos = async (id) => {
 router.get('/', async function(req, res, next) {
   let link = ""
   try {
-    link = await Banner.find()
-    console.log(link)
+    link = await Banner.find();
+    const teachers = await Teacher.find();
+    const  students = await Students.find()
   const videos = await fetchVideos(link[0].playlist);
   console.log(videos.length)
-  res.render('index',{videos})
+  res.render('index',{videos,teachers,students})
 
   } catch (e) {
     console.error(e)
