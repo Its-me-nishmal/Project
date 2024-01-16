@@ -141,13 +141,13 @@
           </li>
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Others</span></li>
           <li class="menu-item">
-            <a href="/support" target="_blank" class="menu-link">
+            <a href="/support"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-support"></i>
               <div data-i18n="Support">Support</div>
             </a>
           </li>
           <li class="menu-item">
-            <a href="/about_us" target="_blank" class="menu-link">
+            <a href="/about-us"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-user"></i>
               <div data-i18n="Documentation">About-Us</div>
             </a>
@@ -274,9 +274,7 @@
             </ul>
           </div>
         </nav>
-        <script>
-document.getElementById("searchInput").addEventListener("input",window.find("no"))
-</script>
+        
                 <!-- / Navbar -->
 
                 <!-- Content wrapper -->
@@ -286,28 +284,18 @@ document.getElementById("searchInput").addEventListener("input",window.find("no"
     <h1>Notifications</h1>
     <div class="list-group mt-3">
         {{#each notifications}}
-    <a href="#" class="list-group-item list-group-item-action" data-description="{{this.desc}}">
-        <div class="d-flex justify-content-between">
-            <h5 class="mb-1">{{this.content}}</h5>
-            <small>{{this.time}}</small>
-        </div>
-        <p class="mb-1">Status:
-            {{#if this.read}}
-                <span style="color: green;">Read</span>
-            {{else}}
-                <span style="color: red;">Unread</span>
-            {{/if}}
-        </p>
-    </a>
+  <a href="#" class="mt-5 list-group-item list-group-item-action" style="height: 100px;" data-description="{{this.desc}}">
+    <div class="d-flex justify-content-between">
+        <h5 class="mb-1">{{this.content}}</h5>
+        
 
-    <!-- Modal with scrollable content -->
-    <button type="button" class="btn {{#if this.read}}btn-secondary{{else}}btn-primary{{/if}}" data-bs-toggle="modal" data-bs-target="#modalScrollable{{@index}}">
-        {{#if this.read}}
-            Mark as Unread
-        {{else}}
-            Mark as Read
-        {{/if}}
-    </button>
+        <!-- "Open" button aligned to the right -->
+        <button type="button" class="btn w-20 ms-auto" data-bs-toggle="modal" data-bs-target="#modalScrollable{{@index}}">
+            Open now
+        </button>
+    </div>
+    <p>{{this.time}}</p>
+</a>
 
     <!-- Modal -->
     <div class="modal fade" id="modalScrollable{{@index}}" tabindex="-1" aria-labelledby="modalScrollableTitle" aria-hidden="true">
@@ -343,7 +331,6 @@ document.getElementById("searchInput").addEventListener("input",window.find("no"
         notificationItems.forEach(item => {
             item.addEventListener('click', function () {
                 const description = this.getAttribute('data-description');
-                alert(description);
             });
         });
     });
@@ -361,20 +348,20 @@ document.getElementById("searchInput").addEventListener("input",window.find("no"
                                     document.write(new Date().getFullYear());
                                 </script>
                                 , made with ❤️ by
-                                <a href="https://themeselection.com" target="_blank"
+                                <a href="https://themeselection.com" 
                                     class="footer-link fw-medium">ThemeSelection</a>
                             </div>
                             <div class="d-none d-lg-inline-block">
                                 <a href="https://themeselection.com/license/" class="footer-link me-4"
-                                    target="_blank">License</a>
-                                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More
+                                    >License</a>
+                                <a href="https://themeselection.com/"  class="footer-link me-4">More
                                     Themes</a>
 
                                 <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
-                                    target="_blank" class="footer-link me-4">Documentation</a>
+                                     class="footer-link me-4">Documentation</a>
 
                                 <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-                                    target="_blank" class="footer-link me-4">Support</a>
+                                     class="footer-link me-4">Support</a>
                             </div>
                         </div>
                     </footer>

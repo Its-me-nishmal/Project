@@ -495,6 +495,7 @@ router.post('/profile',auth, upload.single('profilePicture'), async (req, res) =
   }
 });
 router.get('/notifications', auth, (req,res)=>{
+  console.log("fromdf",req.student)
   const notifications = [
     {
         content: "New notification 1",

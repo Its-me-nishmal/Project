@@ -141,13 +141,13 @@
           </li>
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Others</span></li>
           <li class="menu-item">
-            <a href="/support" target="_blank" class="menu-link">
+            <a href="/support"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-support"></i>
               <div data-i18n="Support">Support</div>
             </a>
           </li>
           <li class="menu-item">
-            <a href="/about_us" target="_blank" class="menu-link">
+            <a href="/about-us"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-user"></i>
               <div data-i18n="Documentation">About-Us</div>
             </a>
@@ -379,7 +379,7 @@ function appendMessage(sender, message, alignment) {
         <div class="d-flex overflow-hidden">
             ${alignment === 'right' && sender === 'user' ? `<div class="user-avatar flex-shrink-0 me-3">
                 <div class="avatar avatar-sm">
-                    <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
+                    <img src="{{student.profilePic}}" alt="Avatar" class="rounded-circle">
                 </div>
             </div>` : ''}
             <div class="chat-message-wrapper flex-grow-1">
@@ -431,20 +431,20 @@ function scrollChatToBottom() {
                                     document.write(new Date().getFullYear());
                                 </script>
                                 , made with ❤️ by
-                                <a href="https://themeselection.com" target="_blank"
+                                <a href="https://themeselection.com" 
                                     class="footer-link fw-medium">ThemeSelection</a>
                             </div>
                             <div class="d-none d-lg-inline-block">
                                 <a href="https://themeselection.com/license/" class="footer-link me-4"
-                                    target="_blank">License</a>
-                                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More
+                                    >License</a>
+                                <a href="https://themeselection.com/"  class="footer-link me-4">More
                                     Themes</a>
 
                                 <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
-                                    target="_blank" class="footer-link me-4">Documentation</a>
+                                     class="footer-link me-4">Documentation</a>
 
                                 <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-                                    target="_blank" class="footer-link me-4">Support</a>
+                                     class="footer-link me-4">Support</a>
                             </div>
                         </div>
                     </footer>
