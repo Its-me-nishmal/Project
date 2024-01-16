@@ -405,7 +405,14 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/profile',auth, (req,res) => res.render(path.join(__dirname,'../views/student/profile')))
+router.get('/profile',auth, async (req,res) =>{
+  let parent = await Parents.findOne({"student_id":req.student._id})
+  if(parent){
+    console.log(parent)
+    return res.render(path.join(__dirname,'../views/student/profile'),{student: req.student,parent})
+  }
+  res.render(path.join(__dirname,'../views/student/profile'),{student: req.student})
+} )
 
 
 
@@ -428,7 +435,7 @@ router.get('/logout', function (req, res) {
   req.logout(function (err) {
     if (err) { return next(err); }
     res.clearCookie('student_token')
-    res.redirect('/student');
+    res.redirect('/');
 
   });
 });
@@ -445,7 +452,8 @@ router.post("/profile/update/parent",auth,async(req,res)=>{
         name:pname,
         token:jwt.sign({_id},process.env.PARENT)
       },{upsert:true,new:true});
-      res.status(200).send("success");
+      res.cookie("ok","ok")
+      res.status(200).redirect("/profile");
   } catch(e){console.log(e);}
 })
 
@@ -472,14 +480,14 @@ router.post('/profile',auth, upload.single('profilePicture'), async (req, res) =
 
     // Save the changes
     await existingUser.save();
-
-    res.json({ message: 'Profile updated successfully.', user: existingUser });
+    res.cookie("ok","ok")
+    res.redirect("/profile");
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-router.get('/notifications',(req,res)=>{
+router.get('/notifications', auth, (req,res)=>{
   const notifications = [
     {
         content: "New notification 1",
@@ -493,11 +501,11 @@ router.get('/notifications',(req,res)=>{
         read: true,
     }
 ];
-res.render(path.join(__dirname,'../views/student/notifications'), { notifications })
+res.render(path.join(__dirname,'../views/student/notifications'), { notifications,student: req.student })
 })
 
-router.get('/solution',(req,res)=>{
-res.render(path.join(__dirname,'../views/student/solution'))
+router.get('/solution',auth,(req,res)=>{
+res.render(path.join(__dirname,'../views/student/solution'),{student: req.student})
 })
 
 router.get('/support', async (req,res) =>{

@@ -237,7 +237,7 @@
                     <h5 class="mb-0">Student Details</h5>
                   </div>
                   <div class="card-body">
-                    <form action="profile" method="post" enctype="multipart/form-data">
+                    <form action="profile" id="parentProfileForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm2()">
                       <div class="mb-3">
                         <div class="col-12">
                           <label class="form-label" for="basic-icon-default-company">Profile Picture</label>
@@ -255,7 +255,7 @@
                         <label class="form-label" for="basic_icon_default_name">Full Name</label>
                         <div class="input-group input-group-merge">
                           <span id="basic-icon-default-name2" class="input-group-text"><i class="bx bx-user"></i></span>
-                          <input type="text" id="basic_icon_default_name" class="form-control" name="basic_icon_default_name" placeholder="John Doe"
+                          <input type="text" id="basic_icon_default_name" class="form-control" name="basic_icon_default_name" placeholder="{{student.name}}"
                             aria-label="John Doe" aria-describedby="basic-icon-default-name2" />
                         </div>
                       </div>
@@ -284,8 +284,8 @@
                         <div class="input-group input-group-merge">
                           <span id="basic-icon-default-phone2" class="input-group-text"><i
                               class="bx bx-phone"></i></span>
-                          <input type="text" id="basic_icon_default_phone" name="basic_icon_default_phone" class="form-control phone-mask"
-                            placeholder="658 799 8941" aria-label="658 799 8941"
+                          <input type="text" id="basic_icon_default_phone2" name="basic_icon_default_phone" class="form-control phone-mask"
+                            placeholder="{{student.mobile}}" aria-label="658 799 8941"
                             aria-describedby="basic-icon-default-phone2" />
                         </div>
                       </div>
@@ -304,14 +304,14 @@
                   <small class="text-muted float-end"></small>
                 </div>
                 <div class="card-body">
-                  <form action="profile/update/parent/" method="post">
+                  <form id="parentProfileForm" action="profile/update/parent/" method="post" onsubmit="return validateForm()">
                     <div class="mb-3">
                       <label class="form-label" for="pname">Guardian Name</label>
                       <div class="input-group input-group-merge">
                         <span id="basic-icon-default-fullname2" class="input-group-text">
                           <i class="bx bx-user"></i>
                         </span>
-                        <input id="pname" type="text" class="form-control" name="pname" placeholder="John Doe"
+                        <input id="pname" type="text" class="form-control" name="pname" placeholder="{{parent.name}}"
                           aria-label="John Doe" aria-describedby="basic-icon-default-fullname2" />
                       </div>
                     </div>
@@ -322,7 +322,7 @@
                           <i class="bx bx-buildings"></i>
                         </span>
                         <input type="text" id="basic-icon-default-company" class="form-control" name="job"
-                          placeholder="ACME Inc." aria-label="ACME Inc."
+                          placeholder="{{parent.job}}" aria-label="ACME Inc."
                           aria-describedby="basic-icon-default-company2" />
                       </div>
                     </div>
@@ -331,8 +331,7 @@
                       <div class="input-group input-group-merge">
                         <span class="input-group-text"><i class="bx bx-envelope"></i></span>
                         <input type="text" id="basic-icon-default-email" class="form-control" name="email"
-                          placeholder="john.doe" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
-                        <span id="basic-icon-default-email2" class="input-group-text">@example.com</span>
+                          placeholder="{{parent.email}}" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
                       </div>
                       <div class="form-text">You can use letters, numbers & periods</div>
                     </div>
@@ -343,7 +342,7 @@
                           <i class="bx bx-phone"></i>
                         </span>
                         <input type="text" id="basic-icon-default-phone" class="form-control phone-mask" name="phone"
-                          placeholder="658 799 8941" aria-label="658 799 8941"
+                          placeholder="{{parent.phone}}" aria-label="658 799 8941"
                           aria-describedby="basic-icon-default-phone2" />
                       </div>
                     </div>
@@ -355,7 +354,91 @@
               </div>
             </div>
           </div>
-          <!-- / Content -->
+          <head>
+    <!-- Other head elements -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<script>
+    function validateForm() {
+        function showError(title, text) {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: 'error',
+            });
+        }
+
+        var pname = document.getElementById('pname').value;
+        var job = document.getElementById('job').value;
+        var email = document.getElementById('email').value;
+        var phone = document.getElementById('basic-icon-default-phone').value;
+
+       
+
+        if (!/^\d{10}$/.test(phone)) {
+            showError('Validation Error', 'Phone number must be 10 digits.');
+            return false; // Prevent form submission
+        }
+
+        if (
+            pname.length < 3 || pname.length > 15 ||
+            job.length < 3 || job.length > 15 ||
+            email.length < 3 || email.length > 15
+        ) {
+            showError('Validation Error', 'Name, Job, and Email must be between 3 and 15 characters.');
+            return false; // Prevent form submission
+        }
+
+        // If everything is valid, allow form submission
+        return true;
+    }
+    function validateForm2() {
+        function showError(title, text) {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: 'error',
+            });
+        }
+
+        var pname = document.getElementById('basic-icon-default-name2').value;
+        var phone = document.getElementById('basic_icon_default_phone2').value;
+
+       
+
+        if (!/^\d{10}$/.test(phone)) {
+            showError('Validation Error', 'Phone number must be 10 digits.');
+            return false; // Prevent form submission
+        }
+
+        if (
+            pname.length < 3 || pname.length > 15 
+        ) {
+            showError('Validation Error', 'Name must be between 3 and 15 characters.');
+            return false; // Prevent form submission
+        }
+
+        // If everything is valid, allow form submission
+        return true;
+    }
+</script>
+ {{!-- if (pname.trim() === '' || job.trim() === '' || email.trim() === '' || phone.trim() === '') {
+            showError('Validation Error', 'All fields are required.');
+            return false; // Prevent form submission
+        } --}}
+          <script>
+            if (document.cookie.indexOf("ok=") !== -1) {
+    // Show SweetAlert notification
+    Swal.fire({
+        title: "Updated",
+        text: "Your Data Up-To-Dated",
+        icon: "success"
+    });
+
+    // Remove the "ok" cookie
+    document.cookie = "ok=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+          </script>
 
           <!-- Footer -->
           <footer class="content-footer footer bg-footer-theme">
