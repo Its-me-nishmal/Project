@@ -119,7 +119,7 @@ router.get('/', auth, async (req, res) => {
     } else if (req.cookies.student_token) {
       res.render(path.join(__dirname, '../views/student/student'), { student: req.student,  videos, play:stdcls.playlist});
     } else {
-      res.redirect('/student/login');
+      res.redirect('/login');
     }
   } catch (error) {
     console.error('Error rendering page:', error.message);
