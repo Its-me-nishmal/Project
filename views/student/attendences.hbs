@@ -75,7 +75,7 @@
           </li>
           {{/if}}
           <li class="menu-item ">
-            <a href="" class="menu-link">
+            <a href="/" class="menu-link">
               <i class="menu-icon tf-icons bx bx-list-ul"></i>
               <div data-i18n="Analytics">Cousers</div>
             </a>
@@ -250,10 +250,10 @@ body {
  overflow: hidden;
  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
  font-weight: 100;
- color: rgba(255, 255, 255, 1);
+ color: rgb(221, 221, 221);
  margin: 0;
  padding: 0;
- background: #4A4A4A;
+ background: #f4f7fa;
  -webkit-touch-callout: none;
  -webkit-user-select: none;
  -khtml-user-select: none;
@@ -630,6 +630,15 @@ body {
             <div id="calendar"></div>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
           </div>
+    <script>
+  let a = ""
+</script>
+{{#if att}}
+  <script>
+    a = JSON.parse('{{{att}}}')
+
+  </script>
+{{/if}}
 <script>
     !function () {
         var today = moment();
@@ -939,15 +948,10 @@ body {
     }();
 
     !function () {
-    alert("{{att.[0].date}}")
-        for (var i = 0; i < {{att.length}}; i++) {
-            alert("{{att.[0].date}}")
-        }
+    
 
-        const data = [
-            { eventName: 'djhjfvlsdj', date: '2024-01-14', color: 'orange' },
-            { eventName: 'Event 2', date: '2023-12-20', color: 'blue' },
-        ]
+        const data = a
+        alert(a)
 
         var calendar = new Calendar('#calendar', data);
     }();

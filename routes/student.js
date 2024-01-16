@@ -214,30 +214,53 @@ router.get('/attendences', auth, async (req, res) => {
     const att = await Attendences.aggregate([
       {
         $match: {
-          'students.std_id': new ObjectId(studentId),
-        },
+          "students.std_id": new ObjectId("654c6f6ea60680a23aaa4a5d")
+        }
       },
       {
         $project: {
-          _id: 0,
-          date: 1,
-          isPresent: {
-            $filter: {
-              input: '$students',
-              as: 'student',
-              cond: { $eq: ['$$student.std_id', new ObjectId(studentId)] },
+          eventName: "$holi",
+          date: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$date",
+            },
+          },
+          color: {
+            $switch: {
+              branches: [
+                {
+                  case: {
+                    $eq: ["$holi", "false"],
+                  },
+                  then: "green",
+                },
+              ],
+              default: "yellow",
             },
           },
         },
       },
-    ]);
+      {
+        $group: {
+          _id: null,
+          data: {
+            $push: {
+              eventName: "$eventName",
+              date: "$date",
+              color: "$color",
+            },
+          },
+        },
+      },
+    ]
+    );
 
-    console.log(att[0]);
-
+    let attend = JSON.stringify(att[0].data)
     if (req.cookies.student_token && req.student.roll === 'admin') {
-      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, Leader: 'leader', att });
+      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, Leader: 'leader', att: attend });
     } else if (req.cookies.student_token) {
-      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, att });
+      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, att: attend });
     } else {
       res.redirect('/student/login');
     }
@@ -246,6 +269,7 @@ router.get('/attendences', auth, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 router.get('/payments', auth, async (req, res) => {
   try {

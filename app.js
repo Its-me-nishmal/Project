@@ -64,7 +64,7 @@ const {Worker, isMainThread} = require('worker_threads')
 if (isMainThread) {
   const worker = new Worker('./workers.js');
 
-  cron.schedule('26 14 * * *', async () => {
+  cron.schedule('48 10 * * *', async () => {
     const check = isholiday(new Date());
   
   if (check === false) {

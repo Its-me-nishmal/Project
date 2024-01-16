@@ -41,6 +41,9 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../assets/js/config.js"></script>
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async=""></script>
+    <!-- Include the Lottie library -->
+<script src="https://cdn.jsdelivr.net/npm/lottie-web@5.7.8"></script>
+
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(function (OneSignal) {
@@ -97,7 +100,7 @@
           </li>
           {{/if}}
           <li class="menu-item ">
-            <a href="" class="menu-link">
+            <a href="/" class="menu-link">
               <i class="menu-icon tf-icons bx bx-list-ul"></i>
               <div data-i18n="Analytics">Cousers</div>
             </a>
@@ -438,37 +441,63 @@
 <div class="container-xxl flex-grow-1 container-p-y">
 <div class="card">
   <div class="card-datatable table-responsive">
-    <table class="invoice-list-table table border-top">
-      <thead>
-       <tr>
-                            <th>Date</th>
-                            <th>Reason</th>
-                            <th>paymentId</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                        </tr>
-      </thead>
-      <tbody>
-                        {{#each payments}}
-                        <tr>
-                            <td><span class="date-container">{{this.date}}</span></td>
-                            <td>{{this.reason}}</td>
-                            <td>{{this.paymentId}}</td>
-                            <td>{{this.amount}}</td>
-                            
-                                {{#if this.isPaid}}
-                                <td class="badge bg-label-success">
-                                Paid</td>
-                                {{else}}
-                                <td style="padding: 0; margin:0">
-                                <button onclick="payNow('{{this._id}}', '{{this.amount}}')" class="badge bg-label-danger">Pay Now</button>
-                                </td>
-                                {{/if}}
-                            
-                        </tr>
-                        {{/each}}
-                    </tbody>
-    </table>
+    <!-- Include the Lottie library -->
+<script src="https://cdn.jsdelivr.net/npm/lottie-web@5.7.8"></script>
+
+<!-- Your table structure -->
+<table class="invoice-list-table table border-top">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Reason</th>
+      <th>paymentId</th>
+      <th>Amount</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#if payments.length}} <!-- Check if payments array is not empty -->
+      {{#each payments}}
+        <tr>
+          <td><span class="date-container">{{this.date}}</span></td>
+          <td>{{this.reason}}</td>
+          <td>{{this.paymentId}}</td>
+          <td>{{this.amount}}</td>
+          
+          {{#if this.isPaid}}
+            <td class="badge bg-label-success">
+              Paid
+            </td>
+          {{else}}
+            <td style="padding: 0; margin:0">
+              <button onclick="payNow('{{this._id}}', '{{this.amount}}')" class="badge bg-label-danger">Pay Now</button>
+            </td>
+          {{/if}}
+        </tr>
+      {{/each}}
+    {{else}}
+      <!-- If no payments found, display Lottie animation -->
+      <tr>
+        <td colspan="5" >
+          <div id="noPaymentsAnimation" style="width: 50%; height: 50%; " class="mx-auto"></div>
+        </td>
+      </tr>
+    {{/if}}
+  </tbody>
+</table>
+
+<!-- JavaScript to initialize Lottie animation -->
+<script>
+  // Replace 'path/to/no-payments-animation.json' with the path to your Lottie animation JSON file
+  const animation = lottie.loadAnimation({
+    container: document.getElementById('noPaymentsAnimation'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: '/assets/css/no-item.json',
+  });
+</script>
+
   </div>
 </div>
 </div>
