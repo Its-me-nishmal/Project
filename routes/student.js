@@ -499,4 +499,11 @@ res.render(path.join(__dirname,'../views/student/notifications'), { notification
 router.get('/solution',(req,res)=>{
 res.render(path.join(__dirname,'../views/student/solution'))
 })
+
+router.get('/support', async (req,res) =>{
+  res.render('support')
+})
+router.get('/about-us', async (req,res) =>{
+  res.render('about')
+})
 module.exports = router;
