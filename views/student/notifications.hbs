@@ -284,18 +284,13 @@
     <h1>Notifications</h1>
     <div class="list-group mt-3">
         {{#each notifications}}
-  <a href="#" class="mt-5 list-group-item list-group-item-action" style="height: 100px;" data-description="{{this.desc}}">
+<a href="#" class="mt-2 list-group-item list-group-item-action btn-outline-info" style="height: 80px;" data-description="{{this.desc}}" data-bs-toggle="modal" data-bs-target="#modalScrollable{{@index}}">
     <div class="d-flex justify-content-between">
         <h5 class="mb-1">{{this.content}}</h5>
-        
-
-        <!-- "Open" button aligned to the right -->
-        <button type="button" class="btn w-20 ms-auto" data-bs-toggle="modal" data-bs-target="#modalScrollable{{@index}}">
-            Open now
-        </button>
     </div>
     <p>{{this.time}}</p>
 </a>
+
 
     <!-- Modal -->
     <div class="modal fade" id="modalScrollable{{@index}}" tabindex="-1" aria-labelledby="modalScrollableTitle" aria-hidden="true">
@@ -309,8 +304,7 @@
                     {{this.desc}}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Thaks!!</button>
                 </div>
             </div>
         </div>

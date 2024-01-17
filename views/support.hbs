@@ -166,25 +166,25 @@
               <!-- Place this tag where you want the button to render. -->
               
 
-              <!-- User -->
+             <!-- User -->
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    <img src="{{student.profilePic}}" alt class="w-px-40 h-auto rounded-circle" />
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="profile">
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                            <img src="{{student.profilePic}}" alt class="w-px-40 h-auto rounded-circle" />
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-medium d-block">John Doe</span>
-                          <small class="text-muted">Admin</small>
+                          <span class="fw-medium d-block">{{student.name}}</span>
+                          <small class="text-muted">{{student.roll}}</small>
                         </div>
                       </div>
                     </a>
@@ -193,23 +193,22 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="profile">
                       <i class="bx bx-user me-2"></i>
                       <span class="align-middle">My Profile</span>
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="bx bx-cog me-2"></i>
-                      <span class="align-middle">Settings</span>
+                    <a class="dropdown-item" href="payments">
+                      <i class="bx bxs-bookmark-minus me-2"></i>
+                      <span class="align-middle">Payments</span>
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="notifications">
                       <span class="d-flex align-items-center align-middle">
-                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                        <span class="flex-grow-1 align-middle ms-1">Billing</span>
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                        <i class="flex-shrink-0 bx bx-bell me-2"></i>
+                        <span class="flex-grow-1 align-middle ms-1">Notifications</span>
                       </span>
                     </a>
                   </li>
@@ -217,9 +216,9 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="javascript:void(0);">
-                      <i class="bx bx-power-off me-2"></i>
-                      <span class="align-middle">Log Out</span>
+                    <a class="dropdown-item" href="logout">
+                      <i class="bx bx-power-off me-2 text-danger"></i>
+                      <span class="align-middle text-danger">Log Out</span>
                     </a>
                   </li>
                 </ul>
@@ -234,15 +233,15 @@
 <section class="container mt-5">
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <h2 class="text-center mb-4">FAQs & Help</h2>
+            <h2 class="text-center mb-4 text-info">FAQs & Help</h2>
             <div class="text-center">
                 <p>Contact us for personalized support:</p>
                 <p>
-                    <i class="fab fa-whatsapp"></i>  +123456789
+                    <i class="fab fa-whatsapp text-success"></i>  +123456789
                     &nbsp;&nbsp;&nbsp;
-                    <i class="far fa-envelope"></i>  admin@cms.college
+                    <i class="far fa-envelope text-success"></i>  admin@cms.college
                     &nbsp;&nbsp;&nbsp;
-                    <i class="fas fa-phone-alt"></i>  +123-456-7890
+                    <i class="fas fa-phone-alt text-success"></i>  +123-456-7890
                 </p>
             </div>
             <p class="text-justify mb-4">

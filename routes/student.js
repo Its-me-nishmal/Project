@@ -516,10 +516,10 @@ router.get('/solution',auth,(req,res)=>{
 res.render(path.join(__dirname,'../views/student/solution'),{student: req.student})
 })
 
-router.get('/support', async (req,res) =>{
-  res.render('support')
+router.get('/support',auth, async (req,res) =>{
+  res.render('support',{student:req.student})
 })
-router.get('/about-us', async (req,res) =>{
-  res.render('about')
+router.get('/about-us',auth, async (req,res) =>{
+  res.render('about',{student:req.student})
 })
 module.exports = router;
