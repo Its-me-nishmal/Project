@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
       newValue: newValue
     };
 
-    fetch('/admin/notify', {
+    fetch('/notify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </head>
 <body>
     <h1>Create Notification</h1>
-    <form method="POST" action="/admin/notifications"> <!-- Adjust the action URL as needed -->
+    <form method="POST" action="/notifications"> <!-- Adjust the action URL as needed -->
         <div class="mb-3">
             <label for="image" class="form-label">Image URL:</label>
             <input type="file" class="form-control" id="image" name="image">

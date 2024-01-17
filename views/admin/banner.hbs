@@ -78,7 +78,7 @@
             if (isYouTubePlaylistUrl(banner)) {
                 const playlistId = new URL(banner).searchParams.get("list");
 
-                let updateUrl = '/admin/banner';
+                let updateUrl = '/banner';
 
                 fetch(updateUrl, {
                     method: 'PUT',
