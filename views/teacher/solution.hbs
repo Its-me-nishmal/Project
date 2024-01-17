@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default"
+    data-assets-path="../assets/">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Collage-Management-System By Nishmal</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="../assets/vendor/js/helpers.js"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../assets/js/config.js"></script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async=""></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(function (OneSignal) {
+            OneSignal.init({
+                appId: "866466e4-aa3c-4272-b0ee-cdde241bd849",
+            });
+            const notification = OneSignal.getNotificationPayload();
+            if (notification) {
+                console.log('Received notification:', notification);
+            }
+            OneSignal.push(['registerForPushNotifications']);
+            OneSignal.on('notificationDisplay', function (event) {
+                const notification = event.notification;
+                console.log('Received notification:', notification);
+            });
+        });
+    </script>
+
+
+
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="/" class="app-brand-link">
+                       <span class="app-brand-logo demo">
+              <img src="../assets/img/logo/trans.png" width="50px" alt="">
+            </span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2">CMS</span>
+                    </a>
+
+                    <a href="javascript:void(0);"
+                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1">
+           <!-- Dashboard -->
+          {{#if Leader}}
+          <li class="menu-item ">
+            <a href="student/leader" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user-pin"></i>
+              <div data-i18n="Analytics">Leader</div>
+            </a>
+          </li>
+          {{/if}}
+          <li class="menu-item ">
+            <a href="/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-list-ul"></i>
+              <div data-i18n="Analytics">Cousers</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a href="ebooks" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-book-open"></i>
+              <div data-i18n="Analytics">E-books</div>
+            </a>
+          </li>
+          <li class="menu-item active">
+            <a href="solution" class="menu-link">
+              <i class="menu-icon tf-icons bx bxs-brain"></i>
+              <div data-i18n="Analytics">Solution AI</div>
+            </a>
+          </li>
+         
+          <li class="menu-item ">
+            <a href="attendences" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-grid"></i>
+              <div data-i18n="Analytics">Attendences</div>
+            </a>
+          </li>
+        
+          <li class="menu-item ">
+            <a href="profile" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="Analytics">Profile</div>
+            </a>
+          </li>
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Others</span></li>
+          <li class="menu-item">
+            <a href="/support"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-support"></i>
+              <div data-i18n="Support">Support</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="/about-us"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="Documentation">About-Us</div>
+            </a>
+          </li>
+            
+           
+            
+          </ul>
+            </aside>
+            <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item d-flex align-items-center">
+                <i class="bx bx-search fs-4 lh-0"></i>
+                <input id="searchInput" type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="Search..."
+                  aria-label="Search..." />
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="{{student.profilePic}}" alt class="w-px-40 h-auto rounded-circle" />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="profile">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="{{student.profilePic}}" alt class="w-px-40 h-auto rounded-circle" />
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-medium d-block">{{student.name}}</span>
+                          <small class="text-muted">{{student.roll}}</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="profile">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">My Profile</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="logout">
+                      <i class="bx bx-power-off me-2 text-danger"></i>
+                      <span class="align-middle text-danger">Log Out</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+                <style>
+/* Add or update these styles to your existing styles */
+.app-chat-history {
+    height: 100%; /* Set the height of the chat container */
+}
+
+.chat-history-body {
+    max-height: 400px; /* Set the maximum height of the chat history */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds the container height */
+}
+
+/* Adjust styles for user and bot messages as needed */
+.chat-message {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chat-message-left {
+    background-color: #e1e1e1; /* Set background color for bot messages */
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.chat-message-right {
+    background-color: #4caf50; /* Set background color for user messages */
+    color: #fff; /* Set text color for user messages */
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+/* Style for input form */
+.chat-history-footer {
+    position: fixed;
+    bottom: 0;
+    width: 90vw;
+    background-color: #fff;
+    padding: 10px;
+    border-top: 1px solid #2ad4bb;
+}
+
+.form-send-message {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.message-input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.send-msg-btn {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    margin-right: 15%;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+
+                </style>
+<div class="container-xxl flex-grow-1 container-p-y">
+                     <!-- Chat History -->
+ <div class="col app-chat-history">
+        <div class="chat-history-wrapper">
+            <!-- ... (unchanged code) ... -->
+
+            <div class="chat-history-body" id="chat-history">
+                <ul class="list-unstyled chat-history mb-0">
+                    <!-- Existing chat messages -->
+                </ul>
+            </div>
+
+            <!-- Chat message form -->
+            <div class="chat-history-footer">
+                <form class="form-send-message d-flex justify-content-between align-items-center" onsubmit="sendMessage(event)">
+                    <input class="form-control message-input border-0 me-3 shadow-none" id="user-message" placeholder="Type your message here...">
+                    <button type="submit" class="btn btn-primary send-msg-btn">
+                        <i class="bx bx-paper-plane me-md-1 me-0"></i>
+                        <span class="align-middle d-md-inline-block d-none">Send</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- /Chat History -->
+</div>
+
+<script>
+  
+ async function sendMessage(event) {
+            event.preventDefault();
+
+            const userMessage = document.getElementById('user-message').value;
+
+            appendMessage('user', userMessage, 'right');
+
+            const botResponse = await fetchBotResponse(userMessage);
+
+            appendMessage('bot', botResponse, 'left');
+
+            scrollChatToBottom();
+
+            document.getElementById('user-message').value = '';
+        }
+
+        async function fetchBotResponse(userMessage) {
+            const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('http://api.brainshop.ai/get?bid=179383&key=1sybvxe8sqozxKq0&uid=123&msg=' + userMessage)}`;
+            
+            
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return data.cnt;
+            } catch (error) {
+                console.error('Error fetching bot response:', error);
+                return 'Sorry, an error occurred while fetching the response.';
+            }
+        }
+
+// Function to append a message to the chat history
+function appendMessage(sender, message, alignment) {
+    const history = document.getElementById('chat-history');
+    const timestamp = getCurrentTime();
+
+    const messageElement = `<li class="chat-message${alignment === 'left' ? ' chat-message-left' : ''}">
+        <div class="d-flex overflow-hidden">
+            ${alignment === 'right' && sender === 'user' ? `<div class="user-avatar flex-shrink-0 me-3">
+                <div class="avatar avatar-sm">
+                    <img src="{{student.profilePic}}" alt="Avatar" class="rounded-circle">
+                </div>
+            </div>` : ''}
+            <div class="chat-message-wrapper flex-grow-1">
+                <div class="chat-message-text">
+                    <p class="mb-0">${message}</p>
+                </div>
+                <div class="text-${alignment} text-muted mt-1">
+                    <i class='bx bx-check-double text-success'></i>
+                    <small>${timestamp}</small>
+                </div>
+            </div>
+            ${alignment === 'left' && sender === 'bot' ? `<div class="user-avatar flex-shrink-0 ms-3">
+                <div class="avatar avatar-sm">
+                    <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
+                </div>
+            </div>` : ''}
+        </div>
+    </li>`;
+
+    // Append the message to the chat history
+    history.innerHTML += messageElement;
+}
+
+// Function to get the current time
+function getCurrentTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    return `${hours}:${minutes}`;
+}
+
+// Function to scroll the chat to the bottom
+function scrollChatToBottom() {
+    const chatHistory = document.getElementById('chat-history');
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+
+</script>
+    
+
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div
+                            class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                            <div class="mb-2 mb-md-0">
+                                ©
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                , made with ❤️ by
+                                <a href="https://themeselection.com" 
+                                    class="footer-link fw-medium">ThemeSelection</a>
+                            </div>
+                            <div class="d-none d-lg-inline-block">
+                                <a href="https://themeselection.com/license/" class="footer-link me-4"
+                                    >License</a>
+                                <a href="https://themeselection.com/"  class="footer-link me-4">More
+                                    Themes</a>
+
+                                <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
+                                     class="footer-link me-4">Documentation</a>
+
+                                <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                                     class="footer-link me-4">Support</a>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../assets/vendor/js/menu.js"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="../assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+
+</html>

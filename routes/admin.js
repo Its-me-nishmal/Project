@@ -106,7 +106,7 @@ router.get('/', async (req, res) => {
           recentPayments: combinedData
         });
       } else {
-        res.redirect('/admin/login');
+        res.redirect('/login');
       }
     } catch (error) {
       console.error(error);
@@ -575,10 +575,10 @@ router.put("/banner", async (req, res) => {
 });
 
 router.get('/support', async (req,res) =>{
-  res.render('support')
+  res.render('support',{ok:"ok"})
 })
 router.get('/about-us', async (req,res) =>{
-  res.render('about')
+  res.render('about',{ok:"ok"})
 })
 
 

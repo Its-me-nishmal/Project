@@ -95,24 +95,28 @@
               <div data-i18n="Analytics">Solution AI</div>
             </a>
           </li>
+          {{#if ok}}
           <li class="menu-item ">
             <a href="notifications" class="menu-link">
               <i class="menu-icon tf-icons bx bx-bell"></i>
               <div data-i18n="Analytics">Notifications</div>
             </a>
           </li>
+          {{/if}}
           <li class="menu-item ">
             <a href="attendences" class="menu-link">
               <i class="menu-icon tf-icons bx bx-grid"></i>
               <div data-i18n="Analytics">Attendences</div>
             </a>
           </li>
+          {{#if ok}}
           <li class="menu-item ">
             <a href="payments" class="menu-link">
               <i class=' menu-icon tf-icons bx bxs-bookmark-minus'></i>
               <div data-i18n="Analytics">Payments</div>
             </a>
           </li>
+          {{/if}}
           <li class="menu-item ">
             <a href="profile" class="menu-link">
               <i class="menu-icon tf-icons bx bx-user"></i>
@@ -198,6 +202,7 @@
                       <span class="align-middle">My Profile</span>
                     </a>
                   </li>
+                  {{#if ok}}
                   <li>
                     <a class="dropdown-item" href="payments">
                       <i class="bx bxs-bookmark-minus me-2"></i>
@@ -212,6 +217,7 @@
                       </span>
                     </a>
                   </li>
+                  {{/if}}
                   <li>
                     <div class="dropdown-divider"></div>
                   </li>

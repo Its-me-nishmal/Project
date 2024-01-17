@@ -10,7 +10,9 @@ const TeacherSchema = new mongoose.Schema({
     mobile: Number,
     parent: String,
     tokens : String,
-    profilePic: String  
+    profilePic : { type : String , default: 'https://res.cloudinary.com/dijvr1gyk/image/upload/v1702963433/profile-pictures/ueuzzhankwtat6muzccz.jpg'},
+    roll : { type: String, default: "Teacher"  , required: true },
+    created : { type : Date , default : Date.now() }
   });
  
 const Teachers = mongoose.model('Teachers',TeacherSchema);

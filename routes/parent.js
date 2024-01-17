@@ -21,7 +21,7 @@ const Attendences = require('../model/Attendences');
 // });
 
 router.get('/login', (req, res) => {
-  res.render('parent/login')
+  res.render('/login')
 });
 
 
@@ -54,16 +54,16 @@ router.get('/', async (req, res) => {
                   
                   res.render('parent/index', { parent, student, attendances });
               } else {
-                  res.redirect('/parent/login');
+                  res.redirect('/login');
               }
           } else {
-              res.redirect('/parent/login');
+              res.redirect('/login');
           }
       } catch (err) {
-          res.redirect('/parent/login');
+          res.redirect('/login');
       }
   } else {
-      res.redirect('/parent/login');
+      res.redirect('/login');
   }
 });
 
@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
     await check.save();
 
     res.cookie('parent_token', parent_token, { httpOnly: true });
-    return res.redirect("/parent");
+    return res.redirect("/");
   } catch (e) {
     console.error(e);
   }

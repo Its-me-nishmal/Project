@@ -24,8 +24,8 @@ const attend = require('../model/Attendences')
 
 
 router.get('/', auth, (req, res) => req.cookies.teacher_token
-  ? res.render(path.join(__dirname, '../views/teacher/teacher.hbs'), { teacher: req.teacher })
-  : res.redirect('/teacher/login'))
+  ? res.redirect("/students")
+  : res.redirect('/login'))
 
 router.get('/register', (req, res) => res.render(path.join(__dirname, '../views/teacher/register.hbs')));
 router.get('/login', (req, res) => res.render(path.join(__dirname, '../views/teacher/login.hbs')));
@@ -41,7 +41,7 @@ router.post('/register', async (req, res) => {
     class: 'Not Specified'
   });
   await user.save()
-  res.redirect('/teacher/login')
+  res.redirect('/login')
 })
 
 router.post('/login', async (req, res) => {
@@ -92,8 +92,8 @@ router.get('/logout', function (req, res) {
 
   req.logout(function (err) {
     if (err) { return next(err); }
-    res.clearCookie('teacher')
-    res.redirect('/teacher');
+    res.clearCookie('teacher_token')
+    res.redirect('/');
 
   });
 });
@@ -104,10 +104,33 @@ module.exports = router;
 
 router.get('/students', auth, async (req, res) => {
   try {
-    const teacher = req.teacher
-    const students = await Students.find({ class: teacher.class });
-
-      res.render(path.join(__dirname, '../views/teacher/students'), { students: students });
+    let teacher = req.teacher;
+    const teachers = await Students.find({ class: teacher.class });
+    console.log(teachers)
+    const teacherDatas = await Students.aggregate([
+      {
+        $match: { class: teacher.class } // Match documents with the teacher's class
+    },
+      {
+        $group: {
+          _id: null,
+          totalRejected: { $sum: { $cond: [{ $eq: ["$status", "rejected"] }, 1, 0] } },
+          totalPending: { $sum: { $cond: [{ $eq: ["$status", "pending"] }, 1, 0] } },
+          totalActive: { $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] } },
+          totalCount: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalRejected: 1,
+          totalPending: 1,
+          totalActive: 1,
+          totalCount: 1
+        }
+      }
+    ])
+    res.render(path.join(__dirname, '../views/teacher/students'), { teachers: teachers,students: teachers, td: teacherDatas,student:req.teacher })
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal server error');
@@ -141,7 +164,8 @@ router.get('/attendences', auth, async (req, res) => {
     console.log(attendanceRecords)
     res.render(path.join(__dirname, '../views/teacher/attendences'), {
       students: students,
-      attendanceRecords: attendanceRecords
+      attendanceRecords: attendanceRecords,
+      student:req.teacher
     });
 
   } catch (error) {
@@ -210,5 +234,64 @@ router.post('/change_status', async (req, res) => {
     console.log('Error updating teacher status');
     console.log(error);
     return res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/solution',auth,(req,res)=>{
+  res.render(path.join(__dirname,'../views/teacher/solution'),{student: req.teacher})
+  })
+  
+  router.get('/support',auth, async (req,res) =>{
+    res.render('support',{student:req.teacher})
+  })
+  router.get('/about-us',auth, async (req,res) =>{
+    res.render('about',{student:req.teacher})
+  })
+
+  let generatedObjects = [];
+
+function randomBooks() {
+  for (let i = 0; i < 3; i++) {
+    let randomId = Math.floor(Math.random() * (50000 - 10000 + 1)) + 10000;
+    let newObject = {
+      id: randomId,
+      iframe: `https://www.gutenberg.org/cache/epub/${randomId}/pg${randomId}-images.html`,
+      covers: [
+        `https://www.gutenberg.org/cache/epub/${randomId}/pg${randomId}.cover.medium.jpg`,
+      ]
+    };
+    generatedObjects.push(newObject);
+  }
+
+  return generatedObjects;
+}
+
+function generateFavoriteBooks(favoriteIds) {
+  return favoriteIds.map(id => {
+    return {
+      id,
+      iframe: `https://www.gutenberg.org/cache/epub/${id}/pg${id}-images.html`,
+      covers: [
+        `https://www.gutenberg.org/cache/epub/${id}/pg${id}.cover.medium.jpg`,
+      ]
+    };
+  });
+}
+
+
+
+router.get('/ebooks', auth, async (req, res) => {
+  try {
+    const favorites = JSON.parse(req.cookies.fav || '[]');
+    const favoriteBooks = generateFavoriteBooks(favorites);
+    const generatedObjects = randomBooks();
+    if (req.cookies.teacher_token) {
+      res.render(path.join(__dirname, '../views/teacher/E-Books'), { student: req.teacher, generatedObjects, favoriteBooks });
+    } else {
+      res.redirect('/login');
+    }
+  } catch (error) {
+    console.error('Error rendering page:', error.message);
+    res.status(500).send('Internal Server Error');
   }
 });
