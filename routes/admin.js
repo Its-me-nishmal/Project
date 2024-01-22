@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
       const Parents = require('../model/Parents');
       const Payments = require('../model/Payments');
 
-      const admin = await AdminModel.findOne({ tokens: req.cookies.admin_token });
+      const admin = await AdminModel.find({ tokens: req.cookies.admin_token });
 
       if (admin) {
         const teachers = await Teacher.find();

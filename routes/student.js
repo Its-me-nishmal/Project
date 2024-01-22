@@ -214,7 +214,7 @@ router.get('/attendences', auth, async (req, res) => {
     const att = await Attendences.aggregate([
       {
         $match: {
-          "students.std_id": new ObjectId("654c6f6ea60680a23aaa4a5d")
+          "students.std_id": new ObjectId(studentId)
         }
       },
       {
