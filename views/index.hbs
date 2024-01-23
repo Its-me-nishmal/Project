@@ -54,9 +54,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.html" class="nav-item nav-link active">Home</a>
-                <a href="about.html" class="nav-item nav-link">About</a>
-                <a href="courses.html" class="nav-item nav-link">Courses</a>
+                <a href="/" class="nav-item nav-link active">Home</a>
+                <a href="/about" class="nav-item nav-link">About</a>
+                <a href="/contact" class="nav-item nav-link">Contact</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Login</a>
                     <div class="dropdown-menu fade-down m-0">
@@ -65,7 +65,7 @@
                         <a href="https://parent.cms.college/login" class="dropdown-item">Parent</a>
                     </div>
                 </div>
-                <a href="contact.html" class="nav-item nav-link">Contact</a>
+                <a href="contact.html" class="nav-item nav-link">support</a>
             </div>
         </div>
     </nav>
@@ -305,98 +305,39 @@
     <!-- Courses End -->
 
 
-    <!-- Team Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Instructors</h6>
-                <h1 class="mb-5">Expert Instructors</h1>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <img class="img-fluid" src="img/team-1.jpg" alt="">
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Professor Celestia Starlight</h5>
-                            <small>Cosmic Education Guide</small>
+   <!-- Team Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Instructors</h6>
+            <h1 class="mb-5">Expert Instructors</h1>
+        </div>
+        <div class="row g-4">
+            {{#each instructors}}
+            <div class="col-lg-3 col-md-6 wow fadeInUp" >
+                <div class="team-item bg-light">
+                    <div class="overflow-hidden">
+                        <img class="img-fluid" src="{{image}}" alt="">
+                    </div>
+                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
+                            {{#each social}}
+                            <a class="btn btn-sm-square btn-primary mx-1" href="{{link}}"><i class="{{icon}}"></i></a>
+                            {{/each}}
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <img class="img-fluid" src="img/team-2.jpg" alt="">
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr. Quantum Lumina</h5>
-                            <small>Chief Learning Navigator</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <img class="img-fluid" src="img/team-3.jpg" alt="">
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Captain Nebula Beacon</h5>
-                            <small>Educational Voyager-in-Chief</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <img class="img-fluid" src="img/team-4.jpg" alt="">
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-sm-square btn-primary mx-1" href=""><i
-                                        class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Madam Solaris Insight</h5>
-                            <small>Enlightenment Engineer</small>
-                        </div>
+                    <div class="text-center p-4">
+                        <h5 class="mb-0">{{name}}</h5>
+                        <small>{{role}}</small>
                     </div>
                 </div>
             </div>
+            {{/each}}
         </div>
     </div>
-    <!-- Team End -->
+</div>
+<!-- Team End -->
+
 
 
     <!-- Testimonial Start -->
@@ -406,51 +347,22 @@
                 <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
                 <h1 class="mb-5">Our Students Say!</h1>
             </div>
-            <div class="owl-carousel testimonial-carousel position-relative">
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-1.jpg"
-                        style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Sophia Rodriguez</h5>
-                    <p>Learning Pioneers</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Dive into a cosmos of knowledge at Cosmos Mastery School. Our courses spark
-                            curiosity, leading students on a journey of discovery that goes beyond textbooks.</p>
-                    </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-2.jpg"
-                        style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Elijah Thompson</h5>
-                    <p>Stellar Scholars</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Navigate the virtual cosmos with engaging online classes. Skilled instructors
-                            create an immersive learning experience, fostering critical thinking skills for future
-                            success.</p>
-                    </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-3.jpg"
-                        style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Ava Patel</h5>
-                    <p>Knowledge Voyagers</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Earn stellar international certificates as you progress. These not only validate
-                            expertise but also open doors to exciting opportunities, empowering you to shine on a global
-                            scale.</p>
-                    </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-4.jpg"
-                        style="width: 80px; height: 80px;">
-                    <h5 class="mb-0">Caleb Morgan</h5>
-                    <p>Cosmic Achievers</p>
-                    <div class="testimonial-text bg-light text-center p-4">
-                        <p class="mb-0">Beyond courses, we empower students for lifelong learning. Graduates leave not
-                            just with knowledge but also the skills and confidence to navigate the real-world cosmos.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <!-- testimonials.hbs -->
+
+
+<div class="owl-carousel testimonial-carousel position-relative">
+  {{#each testimonials}}
+    <div class="testimonial-item text-center">
+      <img class="border rounded-circle p-2 mx-auto mb-3" src="{{image}}" style="width: 80px; height: 80px;" alt="{{name}} Image">
+      <h5 class="mb-0">{{name}}</h5>
+      <p>{{designation}}</p>
+      <div class="testimonial-text bg-light text-center p-4">
+        <p class="mb-0">{{text}}</p>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
         </div>
     </div>
     <!-- Testimonial End -->
@@ -462,11 +374,11 @@
             <div class="row g-5">
                 <div class="col-lg-4">
                     <h4 class="text-white mb-3">Quick Link</h4>
-                    <a class="btn btn-link" href="about-us">About Us</a>
-                    <a class="btn btn-link" href="contact-us">Contact Us</a>
-                    <a class="btn btn-link" href="privacy-policy">Privacy Policy</a>
-                    <a class="btn btn-link" href="terms-condition">Terms & Condition</a>
-                    <a class="btn btn-link" href="faqs-help">FAQs & Help</a>
+                    <a class="btn btn-link" href="/about">About Us</a>
+                    <a class="btn btn-link" href="/contact">Contact Us</a>
+                    <a class="btn btn-link" href="/privacy">Privacy Policy</a>
+                    <a class="btn btn-link" href="/terms">Terms & Condition</a>
+                    <a class="btn btn-link" href="/support">FAQs & Help</a>
 
                 </div>
                 <div class="col-lg-4">
@@ -504,16 +416,55 @@
                         </div>
                     </div>
                 </div> --}}
-                <div class="col-lg-4">
-                    <h4 class="text-white mb-3">Feedback</h4>
-                    <p>Cosmic Insights: Your Feedback Matters</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text"
-                            placeholder="Something...">
-                        <button type="button"
-                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Submit</button>
-                    </div>
-                </div>
+               <div class="col-lg-4">
+    <h4 class="text-white mb-3">Feedback</h4>
+    <p>Cosmic Insights: Your Feedback Matters</p>
+    <div class="position-relative mx-auto" style="max-width: 400px;">
+        <input id="feedbackInput" class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Something...">
+        <button id="submitFeedback" type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Submit</button>
+        <div id="feedbackStatus" style="color: #fff;"></div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('submitFeedback').addEventListener('click', function() {
+        const userName = "User";  // Replace with actual username or data
+        const message = document.getElementById('feedbackInput').value.trim();  // Trim whitespace
+        
+        if (!message) {
+            const feedbackStatus = document.getElementById('feedbackStatus');
+                feedbackStatus.textContent = 'Please Enter Something!';
+                feedbackStatus.style.backgroundColor = '#FF5733'; 
+            return;
+        }
+        
+        const text = `${userName}: ${message}`;
+        const url = `https://api.telegram.org/bot6213478436:AAGKU_DQCdSle2swRuF9RKaxfaIfhCV7bM0/sendMessage?chat_id=@bot_chats_by_nishmal&text=${encodeURIComponent(text)}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const feedbackStatus = document.getElementById('feedbackStatus');
+                if (data.ok) {
+                    document.getElementById('submitFeedback').textContent = 'Submitted';
+                    feedbackStatus.textContent = 'Feedback sent successfully!';
+                    feedbackStatus.style.backgroundColor = '#4CAF50'; // Green background for success
+                    // You can also add additional actions or UI updates here
+                } else {
+                    feedbackStatus.textContent = 'Error sending feedback. Please try again.';
+                    feedbackStatus.style.backgroundColor = '#FF5733'; // Red background for error
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const feedbackStatus = document.getElementById('feedbackStatus');
+                feedbackStatus.textContent = 'Error sending feedback. Please try again.';
+                feedbackStatus.style.backgroundColor = '#FF5733'; // Red background for error
+            });
+    });
+</script>
+
             </div>
         </div>
         <div class="container">
