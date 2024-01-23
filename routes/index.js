@@ -9,6 +9,7 @@ const Classes = require('../model/classes')
 const Parents = require('../model/Parents')
 const Payments = require('../model/Payments')
 const Attendences = require('../model/Attendences');
+const { contactSchema, Contact } = require('../model/Contact');
 
 require('dotenv').config();
 
@@ -159,4 +160,48 @@ router.get('/onesignal.js', (req, res) => {
 router.get('/about',(re,rs)=>{
   rs.render('about_home')
 })
+router.get('/contact',(re,rs)=>{
+  rs.render('contact')
+})
+
+router.post('/process_contact_form', async (req, res) => {
+  try {
+
+    // Save the form data to MongoDB using the spread operator
+    const newContact = new Contact({ ...req.body });
+
+    await newContact.save();
+
+   
+
+    // Redirect to the home page (replace '/' with your desired destination)
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Message Received</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      </head>
+      <body>
+        <script>
+          Swal.fire({
+            icon: 'success',
+            title: 'Message Received!',
+            text: 'We will respond to you soon.',
+          }).then(() => {
+            window.location.href = '/'; // Redirect to the home page
+          });
+        </script>
+      </body>
+      </html>
+    `);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 module.exports = router;
