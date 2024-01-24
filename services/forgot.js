@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'your_email@gmail.com',
+    user: 'alltrackerx@gmail.com',
     pass: 'your_email_password'
   }
 });
@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 const token = generateToken();
 storeTokenInDatabase(userEmail, token);
 
-const resetLink = `http://yourwebsite.com/reset-password/${token}`;
+const resetLink = `http://cms.college.com/reset-password/${token}`;
 
 const mailOptions = {
   from: 'your_email@gmail.com',

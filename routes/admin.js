@@ -35,10 +35,11 @@ router.get('/', async (req, res) => {
       const admin = await AdminModel.find({ tokens: req.cookies.admin_token });
 
       if (admin) {
-        const teachers = await Teacher.find();
-        const classes = await Classes.find();
-        const students = await Students.find();
-        const parents = await Parents.find();
+        const teachers = await Teacher.find().sort({ created: -1 });
+const classes = await Classes.find().sort({ created: -1 });
+const students = await Students.find().sort({ created: -1 });
+const parents = await Parents.find().sort({ created: -1 });
+
 
         const recentStudents = await Students.aggregate([
           {
