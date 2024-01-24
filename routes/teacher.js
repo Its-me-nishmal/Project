@@ -11,7 +11,26 @@ require('dotenv').config();
 const auth = require('../.config/teacher_auth')
 const jwt = require('jsonwebtoken')
 const auto_attendences = require('../services/auto_attendences')
-const attend = require('../model/Attendences')
+const attend = require('../model/Attendences');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const Teachers = require('../model/Teachers');
+
+cloudinary.config({
+  cloud_name: 'dijvr1gyk',
+  api_key: '827348513767443',
+  api_secret: 'iUA9Awo6pH7bKV5j10o05d6Kd9o',
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'profile-pictures',
+    allowed_formats: ['jpg', 'jpeg', 'png'],
+    transformation: [{ width: 150, height: 150, crop: 'limit' }],
+  },
+});
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -293,5 +312,41 @@ router.get('/ebooks', auth, async (req, res) => {
   } catch (error) {
     console.error('Error rendering page:', error.message);
     res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/profile',auth,async(req,res)=>{
+  res.render(path.join(__dirname, '../views/teacher/profile'),{student: req.teacher})
+})
+const upload = multer({ storage });
+
+router.post('/profile',auth, upload.single('profilePicture'), async (req, res) => {
+  console.log(req.body)
+  try {
+    const { phone , basic_icon_default_blood_group, basic_icon_default_name } = req.body;
+
+    const existingUser = await Teachers.findById(req.teacher._id);
+    console.log(existingUser)
+    if (!existingUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update user details
+    existingUser.name = basic_icon_default_name;
+    existingUser.bloodGoup = basic_icon_default_blood_group;
+    existingUser.phone = phone;
+
+    // If a new profile picture is uploaded, update the profilePicture field
+    if (req.file) {
+      existingUser.profilePic = req.file.path;
+    }
+
+    // Save the changes
+    await existingUser.save();
+    res.cookie("ok","ok")
+    res.redirect("/profile");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });

@@ -42,6 +42,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../assets/js/config.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -108,11 +109,20 @@
 
                 <div class="menu-inner-shadow"></div>
 
-                <ul class="menu-inner py-1">
-                    <li class="menu-item ">
+               <ul class="menu-inner py-1">
+           <!-- Dashboard -->
+          {{#if Leader}}
+          <li class="menu-item ">
+            <a href="student/leader" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user-pin"></i>
+              <div data-i18n="Analytics">Leader</div>
+            </a>
+          </li>
+          {{/if}}
+          <li class="menu-item ">
             <a href="/" class="menu-link">
               <i class="menu-icon tf-icons bx bx-user"></i>
-              <div data-i18n="Analytics">Studnets</div>
+              <div data-i18n="Analytics">Students</div>
             </a>
           </li>
 
@@ -128,7 +138,7 @@
               <div data-i18n="Analytics">Solution AI</div>
             </a>
           </li>
-          
+         
           <li class="menu-item active">
             <a href="attendences" class="menu-link">
               <i class="menu-icon tf-icons bx bx-grid"></i>

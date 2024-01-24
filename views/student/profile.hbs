@@ -237,61 +237,69 @@
                     <h5 class="mb-0">Student Details</h5>
                   </div>
                   <div class="card-body">
-                    <form action="profile" id="parentProfileForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm2()">
-                      <div class="mb-3">
-                        <div class="col-12">
-                          <label class="form-label" for="basic-icon-default-company">Profile Picture</label>
+                   <form action="profile" id="studentprofile" method="post" enctype="multipart/form-data"  class="needs-validation" novalidate>
+        <div class="mb-3">
+            <div class="col-12">
+                <label class="form-label" for="profilePicture">Profile Picture</label>
 
-                          <div class="input-group">
-                            <input type="file" class="form-control" name="profilePicture" id="profilePicture" />
-                            <label class="input-group-text" for="profilePicture">Upload</label>
-                          </div>
+                <div class="input-group">
+                    <input type="file" class="form-control" name="profilePicture" id="profilePicture" />
+                    <label class="input-group-text" for="profilePicture">Upload</label>
+                </div>
+            </div>
+        </div>
 
+        <div class="mb-3">
+            <label class="form-label" for="basic_icon_default_name">Full Name</label>
+            <div class="input-group input-group-merge">
+                <span id="basic-icon-default-name2" class="input-group-text"><i class="bx bx-user"></i></span>
+                <input type="text" id="basic_icon_default_name" class="form-control" name="basic_icon_default_name"
+                    placeholder="{{student.name}}" aria-label="John Doe" aria-describedby="basic-icon-default-name2"
+                    pattern="[A-Za-z ]{3,10}" required>
+                <div class="invalid-feedback">
+                    Please enter a valid name with at least 3-10 letters.
+                </div>
+            </div>
+        </div>
 
+        <div class="mb-3">
+            <label class="form-label" for="basic_icon_default_blood_group">Blood Group</label>
+            <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-heart"></i></span>
+                <select id="basic_icon_default_blood_group" class="form-select" name="basic_icon_default_blood_group"
+                    aria-label="Blood Group" required>
+                    <option selected disabled>Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+                <div class="invalid-feedback">
+                    Please select your blood group.
+                </div>
+            </div>
+            <div class="form-text">your Blood Group is {{student.bloodGoup}}</div>
+        </div>
 
-                        </div>
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label" for="basic_icon_default_name">Full Name</label>
-                        <div class="input-group input-group-merge">
-                          <span id="basic-icon-default-name2" class="input-group-text"><i class="bx bx-user"></i></span>
-                          <input type="text" id="basic_icon_default_name" class="form-control" name="basic_icon_default_name" placeholder="{{student.name}}"
-                            aria-label="John Doe" aria-describedby="basic-icon-default-name2" />
-                        </div>
-                      </div>
+        <div class="mb-3">
+            <label class="form-label" for="basic_icon_default_phone">Phone No</label>
+            <div class="input-group input-group-merge">
+                <span id="basic-icon-default-phone2" class="input-group-text"><i class="bx bx-phone"></i></span>
+                <input type="tel" id="basic_icon_default_phone2" name="basic_icon_default_phone" class="form-control phone-mask"
+                    placeholder="{{student.phone}}" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2"
+                    pattern="[0-9]{10}" required>
+                <div class="invalid-feedback">
+                    Please enter a valid 10-digit phone number.
+                </div>
+            </div>
+        </div>
 
-                      <div class="mb-3">
-                        <label class="form-label" for="basic_icon_default_blood_group">Blood Group</label>
-                        <div class="input-group input-group-merge">
-                          <span class="input-group-text"><i class="bx bx-heart"></i></span>
-                          <select id="basic_icon_default_blood_group" class="form-select" name="basic_icon_default_blood_group" aria-label="Blood Group">
-                            <option selected disabled>Select Blood Group</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                          </select>
-                        </div>
-                        <div class="form-text">Select your blood group from the list.</div>
-                      </div>
-
-                      <div class="mb-3">
-                        <label class="form-label" for="basic_icon_default_phone">Phone No</label>
-                        <div class="input-group input-group-merge">
-                          <span id="basic-icon-default-phone2" class="input-group-text"><i
-                              class="bx bx-phone"></i></span>
-                          <input type="text" id="basic_icon_default_phone2" name="basic_icon_default_phone" class="form-control phone-mask"
-                            placeholder="{{student.mobile}}" aria-label="658 799 8941"
-                            aria-describedby="basic-icon-default-phone2" />
-                        </div>
-                      </div>
-
-                      <button type="submit" class="btn btn-primary">Send</button>
-                    </form>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
                   </div>
                 </div>
               </div>
@@ -304,52 +312,64 @@
                   <small class="text-muted float-end"></small>
                 </div>
                 <div class="card-body">
-                  <form id="parentProfileForm" action="profile/update/parent/" method="post" onsubmit="return validateForm()">
-                    <div class="mb-3">
-                      <label class="form-label" for="pname">Guardian Name</label>
-                      <div class="input-group input-group-merge">
-                        <span id="basic-icon-default-fullname2" class="input-group-text">
-                          <i class="bx bx-user"></i>
-                        </span>
-                        <input id="pname" type="text" class="form-control" name="pname" placeholder="{{parent.name}}"
-                          aria-label="John Doe" aria-describedby="basic-icon-default-fullname2" />
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label" id="job" for="job">Job</label>
-                      <div class="input-group input-group-merge">
-                        <span id="basic-icon-default-company2" class="input-group-text">
-                          <i class="bx bx-buildings"></i>
-                        </span>
-                        <input type="text" id="basic-icon-default-company" class="form-control" name="job"
-                          placeholder="{{parent.job}}" aria-label="ACME Inc."
-                          aria-describedby="basic-icon-default-company2" />
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label" id="email" for="email">Email</label>
-                      <div class="input-group input-group-merge">
-                        <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                        <input type="text" id="basic-icon-default-email" class="form-control" name="email"
-                          placeholder="{{parent.email}}" aria-label="john.doe" aria-describedby="basic-icon-default-email2" />
-                      </div>
-                      <div class="form-text">You can use letters, numbers & periods</div>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label" id="phone" for="phone">Phone No</label>
-                      <div class="input-group input-group-merge">
-                        <span id="basic-icon-default-phone2" class="input-group-text">
-                          <i class="bx bx-phone"></i>
-                        </span>
-                        <input type="text" id="basic-icon-default-phone" class="form-control phone-mask" name="phone"
-                          placeholder="{{parent.phone}}" aria-label="658 799 8941"
-                          aria-describedby="basic-icon-default-phone2" />
-                      </div>
-                    </div>
+                  <form id="parentProfileForm" action="profile/update/parent/" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label class="form-label" for="pname">Guardian Name</label>
+            <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text">
+                    <i class="bx bx-user"></i>
+                </span>
+                <input id="pname" type="text" class="form-control" name="pname" placeholder="{{parent.name}}"
+                    aria-label="John Doe" aria-describedby="basic-icon-default-fullname2" pattern="[A-Za-z ]{3,10}"
+                    required>
+                <div class="invalid-feedback">
+                    Please enter a valid name with at least 3-10 letters.
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" id="job" for="job">Job</label>
+            <div class="input-group input-group-merge">
+                <span id="basic-icon-default-company2" class="input-group-text">
+                    <i class="bx bx-buildings"></i>
+                </span>
+                <input type="text" id="basic-icon-default-company" class="form-control" name="job"
+                    placeholder="{{parent.job}}" aria-label="ACME Inc." pattern="[A-Za-z ]{3,10}" required>
+                <div class="invalid-feedback">
+                    Please enter a valid job.
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" id="email" for="email">Email</label>
+            <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                <input type="email" id="basic-icon-default-email" class="form-control" name="email"
+                    placeholder="{{parent.email}}" aria-label="john.doe" pattern="{5,20}" aria-describedby="basic-icon-default-email2"
+                    required>
+                <div class="invalid-feedback">
+                    Please enter a valid email address.
+                </div>
+            </div>
+            <div class="form-text">You can use letters, numbers & periods</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" id="phone" for="phone">Phone No</label>
+            <div class="input-group input-group-merge">
+                <span id="basic-icon-default-phone2" class="input-group-text">
+                    <i class="bx bx-phone"></i>
+                </span>
+                <input type="tel" id="basic-icon-default-phone" class="form-control phone-mask" name="phone"
+                    placeholder="{{parent.phone}}" aria-label="658 799 8941" aria-describedby="basic-icon-default-phone2"
+                    pattern="[0-9]{10}" required>
+                <div class="invalid-feedback">
+                    Please enter a valid 10-digit phone number.
+                </div>
+            </div>
+        </div>
 
-                    <button type="submit" class="btn btn-primary">Send</button>
-                  </form>
-
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
                 </div>
               </div>
             </div>
@@ -359,68 +379,40 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <script>
-    function validateForm() {
-        function showError(title, text) {
-            Swal.fire({
-                title: title,
-                text: text,
-                icon: 'error',
-            });
-        }
+    (function () {
+            'use strict';
+            var forms = document.querySelectorAll('#parentProfileForm');
 
-        var pname = document.getElementById('pname').value;
-        var job = document.getElementById('job').value;
-        var email = document.getElementById('email').value;
-        var phone = document.getElementById('basic-icon-default-phone').value;
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
 
-       
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
+         (function () {
+            'use strict';
+            var forms = document.querySelectorAll('#studentprofile');
 
-        if (!/^\d{10}$/.test(phone)) {
-            showError('Validation Error', 'Phone number must be 10 digits.');
-            return false; // Prevent form submission
-        }
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
 
-        if (
-            pname.length < 3 || pname.length > 15 ||
-            job.length < 3 || job.length > 15 ||
-            email.length < 3 || email.length > 15
-        ) {
-            showError('Validation Error', 'Name, Job, and Email must be between 3 and 15 characters.');
-            return false; // Prevent form submission
-        }
-
-        // If everything is valid, allow form submission
-        return true;
-    }
-    function validateForm2() {
-        function showError(title, text) {
-            Swal.fire({
-                title: title,
-                text: text,
-                icon: 'error',
-            });
-        }
-
-        var pname = document.getElementById('basic-icon-default-name2').value;
-        var phone = document.getElementById('basic_icon_default_phone2').value;
-
-       
-
-        if (!/^\d{10}$/.test(phone)) {
-            showError('Validation Error', 'Phone number must be 10 digits.');
-            return false; // Prevent form submission
-        }
-
-        if (
-            pname.length < 3 || pname.length > 15 
-        ) {
-            showError('Validation Error', 'Name must be between 3 and 15 characters.');
-            return false; // Prevent form submission
-        }
-
-        // If everything is valid, allow form submission
-        return true;
-    }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
 </script>
  {{!-- if (pname.trim() === '' || job.trim() === '' || email.trim() === '' || phone.trim() === '') {
             showError('Validation Error', 'All fields are required.');

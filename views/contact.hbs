@@ -190,16 +190,55 @@
                         </div>
                     </div>
                 </div> --}}
-                <div class="col-lg-4">
-                    <h4 class="text-white mb-3">Feedback</h4>
-                    <p>Cosmic Insights: Your Feedback Matters</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text"
-                            placeholder="Something...">
-                        <button type="button"
-                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Submit</button>
-                    </div>
-                </div>
+                  <div class="col-lg-4">
+    <h4 class="text-white mb-3">Feedback</h4>
+    <p>Cosmic Insights: Your Feedback Matters</p>
+    <div class="position-relative mx-auto" style="max-width: 400px;">
+        <input id="feedbackInput" class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Something...">
+        <button id="submitFeedback" type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">Submit</button>
+        <div id="feedbackStatus" style="color: #fff;"></div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('submitFeedback').addEventListener('click', function() {
+        const userName = "User";  // Replace with actual username or data
+        const message = document.getElementById('feedbackInput').value.trim();  // Trim whitespace
+        
+        if (!message) {
+            const feedbackStatus = document.getElementById('feedbackStatus');
+                feedbackStatus.textContent = 'Please Enter Something!';
+                feedbackStatus.style.backgroundColor = '#FF5733'; 
+            return;
+        }
+        
+        const text = `${userName}: ${message}`;
+        const url = `https://api.telegram.org/bot6213478436:AAGKU_DQCdSle2swRuF9RKaxfaIfhCV7bM0/sendMessage?chat_id=@bot_chats_by_nishmal&text=${encodeURIComponent(text)}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const feedbackStatus = document.getElementById('feedbackStatus');
+                if (data.ok) {
+                    document.getElementById('submitFeedback').textContent = 'Submitted';
+                    feedbackStatus.textContent = 'Feedback sent successfully!';
+                    feedbackStatus.style.backgroundColor = '#4CAF50'; // Green background for success
+                    // You can also add additional actions or UI updates here
+                } else {
+                    feedbackStatus.textContent = 'Error sending feedback. Please try again.';
+                    feedbackStatus.style.backgroundColor = '#FF5733'; // Red background for error
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const feedbackStatus = document.getElementById('feedbackStatus');
+                feedbackStatus.textContent = 'Error sending feedback. Please try again.';
+                feedbackStatus.style.backgroundColor = '#FF5733'; // Red background for error
+            });
+    });
+</script>
+
             </div>
         </div>
         <div class="container">

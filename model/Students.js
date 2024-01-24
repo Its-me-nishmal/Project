@@ -8,6 +8,7 @@ const StudentSchema = new mongoose.Schema({
     status: String,
     class: String,
     mobile: Number,
+    phone: Number,
     parent: String,
     tokens : String,
     amount : String,

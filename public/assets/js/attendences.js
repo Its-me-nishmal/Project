@@ -15,16 +15,10 @@ document.getElementById('update').addEventListener('click',(e)=> {
     })
     .then(res => res.json())
     .then(data => {
-        // Display SweetAlert notification
         Swal.fire({
             icon: 'success',
             title: 'Updated Successfully',
             text: 'Attendance has been updated.',
-        });
-
-        // Reload the page after the notification is closed
-        Swal.fire().then(() => {
-            window.location.reload();
         });
     })
     .catch(error => {

@@ -8,6 +8,7 @@ const TeacherSchema = new mongoose.Schema({
     status: String,
     class: String,
     mobile: Number,
+    phone: Number,
     parent: String,
     tokens : String,
     profilePic : { type : String , default: 'https://res.cloudinary.com/dijvr1gyk/image/upload/v1702963433/profile-pictures/ueuzzhankwtat6muzccz.jpg'},
