@@ -231,12 +231,30 @@ router.get('/attendences', auth, async (req, res) => {
               branches: [
                 {
                   case: {
-                    $eq: ["$holi", "false"],
+                    $eq: ["$holi", "Attended"],
                   },
                   then: "green",
                 },
               ],
-              default: "yellow",
+              default: {
+                $switch: {
+                  branches: [
+                    {
+                      case: {
+                        $eq: [{ $dayOfWeek: "$date" }, 1], 
+                      },
+                      then: "orange",
+                    },
+                    {
+                      case: {
+                        $eq: ["$holi", "Attended"],
+                      },
+                      then: "green",
+                    },
+                  ],
+                  default: "yellow",
+                },
+              },
             },
           },
         },
@@ -253,14 +271,36 @@ router.get('/attendences', auth, async (req, res) => {
           },
         },
       },
-    ]
-    );
+    ]);
+    const sundays2024 = [];
+
+// Loop through each day of the year 2024
+const sundaysCurrentMonth = [];
+
+const currentDate = new Date();
+const currentYear = 2024;
+const currentMonth = currentDate.getMonth();
+
+// Loop through each day of the current month in the year 2024
+for (let day = 1; day <= new Date(currentYear, currentMonth + 1, 0).getDate(); day++) {
+  const date = new Date(currentYear, currentMonth, day);
+  if (date.getDay() === 1) {
+    sundaysCurrentMonth.push({
+      "eventName": "sunday",
+      "date": date.toISOString().split('T')[0],
+      "color": "orange"
+    });
+  }
+}
+
 
     let attend = JSON.stringify(att[0].data)
+    let bk = JSON.stringify([...JSON.parse(attend),...sundaysCurrentMonth])
+
     if (req.cookies.student_token && req.student.roll === 'admin') {
-      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, Leader: 'leader', att: attend });
+      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, Leader: 'leader', att:bk });
     } else if (req.cookies.student_token) {
-      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student, att: attend });
+      res.render(path.join(__dirname, '../views/student/attendences'), { student: req.student,att: bk });
     } else {
       res.redirect('/student/login');
     }
@@ -269,6 +309,7 @@ router.get('/attendences', auth, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 router.get('/payments', auth, async (req, res) => {

@@ -21,7 +21,7 @@ const Attendences = require('../model/Attendences');
 // });
 
 router.get('/login', (req, res) => {
-  res.render('/login')
+  res.render(path.join(__dirname, '../views/parent/login.hbs'));
 });
 
 
@@ -38,7 +38,13 @@ router.get('/', async (req, res) => {
                   { $match: {'students.std_id': student._id}},
                   {
                     $project: {
-                      date: 1,
+                      date: {
+                        $dateToString: {
+                          format: "%Y-%m-%d", // You can adjust the format as needed
+                          date: "$date",
+                          timezone: "GMT" // Set the desired timezone, or remove this line if no timezone conversion is needed
+                        }
+                      },
                       students: {
                         $filter:{
                           input: '$students',

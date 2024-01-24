@@ -47,7 +47,7 @@ async function auto_holi_attendance() {
     const without_time = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
     
     if (isholiday(without_time)) {
-      const holidayReason = 'Your holiday reason here'; // Replace with the actual holiday reason
+      const holidayReason = 'Holiday'; // Replace with the actual holiday reason
       await Attendances.updateOne({ date: without_time }, { holi: holidayReason });
       
       console.log(`Holiday reason set: ${holidayReason}`);

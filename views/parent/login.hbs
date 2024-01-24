@@ -1,17 +1,8 @@
 <!DOCTYPE html>
-
-<html
-  lang="en"
-  class="light-style layout-wide customizer-hide"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free">
-  <head>
+<html lang="en" class="light-style layout-wide customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+<head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Login Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
 
@@ -23,9 +14,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
 
@@ -38,125 +27,64 @@
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <!-- Page CSS -->
-    <!-- Page -->
     <link rel="stylesheet" href="../assets/vendor/css/pages/page-auth.css" />
 
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../assets/js/config.js"></script>
-  </head>
+</head>
 
-  
 <body>
-  <div class="container-xxl">
-    <div class="authentication-wrapper authentication-basic container-p-y">
-      <div class="authentication-inner">
-        <div class="card">
-          <div class="card-body">
-            <div class="app-brand justify-content-center">
-              <a href="index.html" class="app-brand-link gap-2">
-                <span class="app-brand-logo demo">
-                  <img src="../assets/img/logo/trans.png" width="100px" alt="">
-                </span>
-                <span class="app-brand-text demo text-body fw-bold">ST. Thomas</span>
-              </a>
-            </div>
-            <h4 class="mb-2">Welcome to ST. Thomas! 👋</h4>
-            <p class="mb-4" id="changelog">Please sign-in to your account and start the adventure</p>
+    <div class="container-xxl">
+        <div class="authentication-wrapper authentication-basic container-p-y">
+            <div class="authentication-inner">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="app-brand justify-content-center">
+                            <a href="index.html" class="app-brand-link gap-2">
+                                <span class="app-brand-logo demo">
+                                    <img src="../assets/img/logo/trans.png" width="100px" alt="">
+                                </span>
+                                <span class="app-brand-text demo text-body fw-bold">ST. Thomas</span>
+                            </a>
+                        </div>
+                        <h4 class="mb-2">Welcome to ST. Thomas! 👋</h4>
+                        <p class="mb-4" id="changelog">Please sign-in to your account and start the adventure</p>
 
-            <form id="formAuthentication" class="mb-3" action="/parent/login" method="POST">
-              <div class="mb-3">
-                <label for="phone" class="form-label">Phone Number</label>
-                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" autofocus />
-              </div>
-              <div class="mb-3" id="otpSection" style="display:none;">
-                <label for="otp" class="form-label">One-Time Password (OTP)</label>
-                <input type="text" id="otp" class="form-control" name="otp" placeholder="Enter OTP" aria-describedby="otp" />
-              </div>
-              <button type="button" class="btn btn-link" id="verifyBtn" onclick="sendOTP()">Send OTP</button>
-              <div class="spinner-border text-primary d-none" id="loadingSpinner" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-              <div class="mb-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="remember-me" />
-                  <label class="form-check-label" for="remember-me"> Remember Me </label>
+                        <form id="formAuthentication" class="mb-3" action="/login" method="POST">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" autofocus />
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" />
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="remember-me" />
+                                    <label class="form-check-label" for="remember-me"> Remember Me </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary d-grid w-100" id="submit" type="submit">Sign in</button>
+                            </div>
+                        </form>
+
+                        <p class="text-center">
+                            <span>New on our platform?</span>
+                            <a href="/student/register">
+                                <span>Create an account</span>
+                            </a>
+                        </p>
+                    </div>
                 </div>
-              </div>
-              <div class="mb-3">
-                <button class="btn btn-primary d-grid w-100" id="submit" type="submit">Sign in</button>
-              </div>
-            </form>
-
-            <p class="text-center">
-              <span>New on our platform?</span>
-              <a href="/student/register">
-                <span>Create an account</span>
-              </a>
-            </p>
-          </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    function sendOTP() {
-      // Display the loading spinner
-      document.getElementById('loadingSpinner').classList.remove('d-none');
-      
-      // Implement logic to send OTP to the user's phone number
-      // This can be done using AJAX to communicate with a server endpoint
-      // For now, just show the OTP input field for demonstration purposes
-      setTimeout(function() {
-        document.getElementById('otpSection').style.display = 'block';
-        // Hide the loading spinner after showing the OTP input field
-        document.getElementById('loadingSpinner').classList.add('d-none');
-        alert('OTP sent to your phone number!');
-      }, 2000); // Simulating a delay for demonstration purposes (replace with your actual OTP sending logic)
-    }
-  </script>
-
-
-
-    <!-- / Content -->
-
-    {{#if status_pending}}
-    <script>
-      document.getElementById('changelog').textContent = 'Please Wait for Admin Approval to Complete';
-      document.getElementById('changelog').style.color = 'green';
-    </script>
-{{/if}}
-{{#if status_rejected}}
-    <script>
-      document.getElementById('changelog').textContent = 'Admin Rejected Your Request';
-      document.getElementById('changelog').style.color = 'red';
-    </script>
-{{/if}}
-    {{#if pass}}
-    <script>
-      document.getElementById('changelog').textContent = 'Password not valid';
-      document.getElementById('changelog').style.color = 'red';
-    </script>
-{{/if}}
-{{#if user}}
-    <script>
-      document.getElementById('changelog').textContent = 'Email Not Valid';
-      document.getElementById('changelog').style.color = 'red';
-    </script>
-{{/if}}
-{{#if pay}}
-    <script>
-      document.getElementById('changelog').textContent = `please complete your payment amount `+ {{pay}};
-      document.getElementById('changelog').style.color = 'Green';
-      document.getElementById('submit').textContent = ' To Payment ₹ ' + {{pay}};
-      document.getElementById('submit').style.backgroundColor = 'green';
-    </script>
-{{/if}}
     <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
     <script src="../assets/js/parent.js"></script>
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
@@ -164,16 +92,10 @@
     <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
 
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
 
-    <!-- Page JS -->
-
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
+</body>
 </html>
